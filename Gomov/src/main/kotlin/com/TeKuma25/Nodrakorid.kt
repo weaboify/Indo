@@ -5,8 +5,8 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
+import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import java.net.URI
 
 class Nodrakorid : Gomov() {
     override var mainUrl = "https://tv.nodrakor22.sbs"
@@ -14,46 +14,36 @@ class Nodrakorid : Gomov() {
 
     override val mainPage = mainPageOf(
         "genre/movie/page/%d/" to "Film Terbaru",
-        "genre/korean-movie/page/%d/" to "Film Korea",
+        "country/indonesia/page/%d/" to "Film Indonesia",
         "genre/drama/page/%d/" to "Drama Korea",
-        "genre/c-drama/c-drama-c-drama/page/%d/" to "Drama China",
-        "genre/thai-drama/page/%d/" to "Drama Thailand",
+        "genre/c-drama/page/%d/" to "Drama China",
+        "genre/fantasy/page/%d/" to "Fantasy",
     )
 
     override suspend fun load(url: String): LoadResponse {
-        return super.load(url).apply {
-            when (this) {
-                is TvSeriesLoadResponse -> {
-                    val doc = app.get(url).document
-                    this.comingSoon = false
-                    this.episodes = when {
-                        doc.select("div.vid-episodes a, div.gmr-listseries a").isNotEmpty() -> this.episodes
-                        doc.select("div#download").isEmpty() -> {
-                            doc.select("div.entry-content p:contains(Episode)").distinctBy {
-                                it.text()
-                            }.mapNotNull { eps ->
-                                val endSibling = eps.nextElementSiblings().select("p:contains(Episode)").firstOrNull() ?: eps.nextElementSiblings().select("div.content-moviedata").firstOrNull()
-                                val siblings = eps.nextElementSiblingsUntil(endSibling).map { ele ->
-                                    ele.ownText().filter { it.isDigit() }.toIntOrNull() to ele.select("a")
-                                        .map { it.attr("href") to it.text() }
-                                }.filter { it.first != null }
-                                Episode(siblings.toJson(), episode = eps.text().toEpisode())
-                            }
-                        }
-                        else -> {
-                            doc.select("div#download h3.title-download").mapNotNull { eps ->
-                                val siblings = eps.nextElementSibling()?.select("li")?.map { ele ->
-                                    ele.text().filter { it.isDigit() }.toIntOrNull() to ele.select("a").map {
-                                        it.attr("href") to it.text().split(" ").first()
-                                    }
-                                }?.filter { it.first != null }
-                                Episode(siblings?.toJson() ?: return@mapNotNull null, episode = eps.text().toEpisode())
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        val document = app.get(url).document
+
+        // Parsing metadata film
+        val title = document.selectFirst("h1.entry-title")?.text().orEmpty()
+        val description = document.selectFirst("div.entry-content p")?.text().orEmpty()
+        val year = document.selectFirst(".gmr-moviedata a[rel=tag]")?.text()?.toIntOrNull()
+        val posterUrl = document.selectFirst(".gmr-movie-data-top img")?.attr("src")
+        val genre = document.select(".gmr-moviedata a[rel=category tag]").joinToString(", ") { it.text() }
+
+        // Parsing tabel tautan unduhan
+        val downloadLinks = parseDownloadLinks(document)
+
+        return MovieLoadResponse(
+            name = title,
+            url = url,
+            posterUrl = posterUrl,
+            year = year,
+            description = description,
+            rating = null,
+            duration = null,
+            tags = listOf(genre),
+            links = downloadLinks.toJson()
+        )
     }
 
     override suspend fun loadLinks(
@@ -62,84 +52,36 @@ class Nodrakorid : Gomov() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        return if (data.startsWith("[")) {
-            tryParseJson<ArrayList<LinkData>>(data)?.filter { it.first != 360 }?.map {
-                it.second.apmap { link ->
-                    loadFixedExtractor(
-                        fixEmbed(link.first, link.second),
-                        it.first,
-                        "$mainUrl/",
-                        subtitleCallback,
-                        callback
+        val links = tryParseJson<ArrayList<LinkData>>(data) ?: return false
+        links.forEach { linkData ->
+            linkData.second.forEach { second ->
+                callback.invoke(
+                    ExtractorLink(
+                        name = second.second, // Nama server
+                        url = second.first,   // URL unduhan
+                        referer = mainUrl,
+                        quality = linkData.first ?: Qualities.Unknown.value
                     )
-                }
+                )
             }
-            true
-        } else {
-            super.loadLinks(data, isCasting, subtitleCallback, callback)
         }
+        return true
     }
 
-    private fun fixEmbed(url: String, server: String): String {
-        return when {
-            server.contains("streamsb", true) -> {
-                val host = getBaseUrl(url)
-                url.replace("$host/", "$host/e/")
-            }
-
-            server.contains("hxfile", true) -> {
-                val host = getBaseUrl(url)
-                val id = url.substringAfterLast("/")
-                "$host/embed-$id.html"
-            }
-
-            else -> url
-        }
-    }
-
-    private fun String.toEpisode() : Int? {
-        return Regex("(?i)Episode\\s?([0-9]+)").find(this)?.groupValues?.getOrNull(1)?.toIntOrNull()
-    }
-
-    private fun getBaseUrl(url: String): String {
-        return URI(url).let {
-            "${it.scheme}://${it.host}"
-        }
-    }
-
-    private suspend fun loadFixedExtractor(
-        url: String,
-        quality: Int?,
-        referer: String? = null,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
-    ) {
-        loadExtractor(url, referer, subtitleCallback) { link ->
-            callback.invoke(
-                ExtractorLink(
-                    link.name,
-                    link.name,
-                    link.url,
-                    link.referer,
-                    if(link.type == ExtractorLinkType.M3U8) link.quality else quality ?: Qualities.Unknown.value,
-                    link.type,
-                    link.headers,
-                    link.extractorData
+    private fun parseDownloadLinks(document: Document): List<LinkData> {
+        val rows = document.select("table tbody tr")
+        return rows.mapNotNull { row ->
+            val provider = row.selectFirst("td strong")?.text() ?: return@mapNotNull null
+            val linkElement = row.selectFirst("td a")
+            val url = linkElement?.attr("href") ?: return@mapNotNull null
+            val resolution = linkElement.attr("class").substringAfter("btn-").substringBefore(" ")
+            LinkData(
+                first = resolution.toIntOrNull(),
+                second = arrayListOf(
+                    Second(first = url, second = provider)
                 )
             )
         }
-    }
-
-    private fun Element.nextElementSiblingsUntil(untilElement: Element?): List<Element> {
-        val siblings = mutableListOf<Element>()
-        var currentElement = this.nextElementSibling()
-
-        while (currentElement != null && currentElement != untilElement) {
-            siblings.add(currentElement)
-            currentElement = currentElement.nextElementSibling()
-        }
-
-        return siblings
     }
 
     data class LinkData(
