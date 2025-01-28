@@ -14,7 +14,6 @@ class Nodrakorid : Gomov() {
 
     override val mainPage = mainPageOf(
         "genre/movie/page/%d/" to "Film Terbaru",
-        "country/indonesia/page/%d/" to "Film Indonesia",
         "genre/drama/page/%d/" to "Drama Korea",
         "genre/c-drama/page/%d/" to "Drama China",
         "genre/fantasy/page/%d/" to "Fantasy",
@@ -36,13 +35,16 @@ class Nodrakorid : Gomov() {
         return MovieLoadResponse(
             name = title,
             url = url,
+            apiName = this.name, // Wajib disertakan
+            type = TvType.Movie, // Pastikan sesuai dengan jenis konten
+            dataUrl = url,       // URL data yang dimuat
             posterUrl = posterUrl,
             year = year,
             description = description,
             rating = null,
             duration = null,
             tags = listOf(genre),
-            links = downloadLinks.toJson()
+            links = downloadLinks.toJson() // Tautan diubah menjadi JSON
         )
     }
 
@@ -57,10 +59,12 @@ class Nodrakorid : Gomov() {
             linkData.second.forEach { second ->
                 callback.invoke(
                     ExtractorLink(
-                        name = second.second, // Nama server
-                        url = second.first,   // URL unduhan
+                        source = second.second,  // Nama server
+                        name = second.second,    // Nama server
+                        url = second.first,      // URL unduhan
                         referer = mainUrl,
-                        quality = linkData.first ?: Qualities.Unknown.value
+                        quality = linkData.first ?: Qualities.Unknown.value,
+                        isM3u8 = false           // Tambahkan ini jika diperlukan
                     )
                 )
             }
