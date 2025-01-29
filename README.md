@@ -1,6 +1,10 @@
-# Cloudstream Extensions
+# Indostream Cloudstream Extensions
 
 This repository contains extensions for the Cloudstream application. Each extensions is organized into its own subdirectory and can be built and included in the Cloudstream app.
+
+```Link Repo
+https://raw.githubusercontent.com/TeKuma25/IndoStream/builds/repo.json
+```
 
 ## Project Structure
 
