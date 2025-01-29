@@ -40,11 +40,10 @@ class Nodrakorid : Gomov() {
             dataUrl = url,       // URL data yang dimuat
             posterUrl = posterUrl,
             year = year,
-            description = description,
+            plot = description,
             rating = null,
             duration = null,
             tags = listOf(genre),
-            links = downloadLinks.toJson() // Tautan diubah menjadi JSON
         )
     }
 
