@@ -35,7 +35,6 @@ class OploverzProvider : MainAPI() {
                 else -> ShowStatus.Completed
             }
         }
-
     }
 
     override val mainPage = mainPageOf(
@@ -86,7 +85,6 @@ class OploverzProvider : MainAPI() {
             this.posterUrl = posterUrl
             addSub(epNum)
         }
-
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
@@ -103,7 +101,7 @@ class OploverzProvider : MainAPI() {
                     this.posterUrl = posterUrl
                 }
             }
-            if(media.isNotEmpty()) anime.addAll(media)
+            if (media.isNotEmpty()) anime.addAll(media)
         }
         return anime
     }
@@ -122,7 +120,7 @@ class OploverzProvider : MainAPI() {
             Episode(link, episode = episode)
         }.reversed()
 
-        val tracker = APIHolder.getTracker(listOf(title),TrackerType.getTypes(type),year,true)
+        val tracker = APIHolder.getTracker(listOf(title), TrackerType.getTypes(type), year, true)
 
         return newAnimeLoadResponse(title, url, type) {
             posterUrl = tracker?.image ?: document.selectFirst("div.thumb > img")?.attr("src")
@@ -208,12 +206,11 @@ class OploverzProvider : MainAPI() {
         }
     }
 
-    private fun String.fixQuality() : Int {
-        return when(this) {
+    private fun String.fixQuality(): Int {
+        return when (this) {
             "MP4HD" -> Qualities.P720.value
             "FULLHD" -> Qualities.P1080.value
             else -> Regex("(\\d{3,4})p").find(this)?.groupValues?.get(1)?.toIntOrNull() ?: Qualities.Unknown.value
         }
     }
-
 }

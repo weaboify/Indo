@@ -1,4 +1,4 @@
-package com.tekuma25
+package com.TeKuma25
 
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
