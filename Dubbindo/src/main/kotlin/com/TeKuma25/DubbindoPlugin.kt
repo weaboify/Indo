@@ -4,7 +4,7 @@ package com.tekuma25
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
 import android.content.Context
-import com.TeKuma25.Dubbindo
+import com.tekuma25.Dubbindo
 
 @CloudstreamPlugin
 class DubbindoPlugin: Plugin() {
