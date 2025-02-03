@@ -250,9 +250,13 @@ class Idlix : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ) {
         try {
-            val document = app.get(url, referer = referer).document
-            val hash = url.split("/").last().substringAfter("data=")
+            // Mengambil hash dari URL
+            val hash = url.split("/").last()
 
+            // Mendapatkan dokumen dari URL
+            val document = app.get(url, referer = referer).document
+
+            // Mengirimkan permintaan POST untuk mendapatkan m3u8 link
             val m3uLink = app.post(
                 url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
                 data = mapOf("hash" to hash, "r" to "$referer"),
@@ -260,12 +264,14 @@ class Idlix : MainAPI() {
                 headers = mapOf("X-Requested-With" to "XMLHttpRequest")
             ).parsed<ResponseSource>().videoSource
 
+            // Menghasilkan m3u8 dan memanggil callback untuk setiap link
             M3u8Helper.generateM3u8(
                 this.name,
                 m3uLink,
                 "$referer",
             ).forEach(callback)
 
+            // Memproses subtitle dari dokumen
             document.select("script").map { script ->
                 if (script.data().contains("eval(function(p,a,c,k,e,d)")) {
                     val subData =
