@@ -9,6 +9,7 @@ import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
 import org.jsoup.nodes.Element
 import java.net.URI
+import android.util.Log
 
 class Idlix : MainAPI() {
     override var mainUrl = "https://tv7.idlix.asia"
@@ -29,11 +30,15 @@ class Idlix : MainAPI() {
         "$mainUrl/" to "Featured",
         "$mainUrl/trending/page/?get=movies" to "Trending Movies",
         "$mainUrl/trending/page/?get=tv" to "Trending TV Series",
-        "$mainUrl/movie/page/" to "Movie Terbaru",
-        "$mainUrl/tvseries/page/" to "TV Series Terbaru",
+        "$mainUrl/movie/page/" to "Film Terbaru",
+        "$mainUrl/genre/action/page/" to "Film Action",
+        "$mainUrl/genre/drama-korea/page/" to "Drama Korea",
+        "$mainUrl/genre/anime/page/" to "Anime",
+        "$mainUrl/tvseries/page/" to "Serial TV",
+        "$mainUrl/season/page/" to "Season Terbaru",
+        "$mainUrl/episode/page/" to "Episode Terbaru",
 //        "$mainUrl/network/netflix/page/" to "Netflix",
-//        "$mainUrl/genre/anime/page/" to "Anime",
-//        "$mainUrl/genre/drama-korea/page/" to "Drama Korea",
+
     )
 
     private fun getBaseUrl(url: String): String {
@@ -230,7 +235,12 @@ class Idlix : MainAPI() {
     }
 
     private fun String.fixBloat(): String {
-        return this.replace("\"", "").replace("\\", "")
+        return try {
+            this.replace("\"", "").replace("\\", "")
+        } catch (e: Exception) {
+            Log.e("Idlix", "Error in fixBloat: ${e.message}")
+            throw e
+        }
     }
 
     private suspend fun getUrl(
@@ -239,44 +249,53 @@ class Idlix : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ) {
-        val document = app.get(url, referer = referer).document
-        val hash = url.split("/").last().substringAfter("data=")
+        try {
+            val document = app.get(url, referer = referer).document
+            val hash = url.split("/").last().substringAfter("data=")
 
-        val m3uLink = app.post(
-            url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
-            data = mapOf("hash" to hash, "r" to "$referer"),
-            referer = referer,
-            headers = mapOf("X-Requested-With" to "XMLHttpRequest")
-        ).parsed<ResponseSource>().videoSource
+            val m3uLink = app.post(
+                url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
+                data = mapOf("hash" to hash, "r" to "$referer"),
+                referer = referer,
+                headers = mapOf("X-Requested-With" to "XMLHttpRequest")
+            ).parsed<ResponseSource>().videoSource
 
-        M3u8Helper.generateM3u8(
-            this.name,
-            m3uLink,
-            "$referer",
-        ).forEach(callback)
+            M3u8Helper.generateM3u8(
+                this.name,
+                m3uLink,
+                "$referer",
+            ).forEach(callback)
 
-
-        document.select("script").map { script ->
-            if (script.data().contains("eval(function(p,a,c,k,e,d)")) {
-                val subData =
-                    getAndUnpack(script.data()).substringAfter("\"tracks\":[").substringBefore("],")
-                AppUtils.tryParseJson<List<Tracks>>("[$subData]")?.map { subtitle ->
-                    subtitleCallback.invoke(
-                        SubtitleFile(
-                            getLanguage(subtitle.label ?: ""),
-                            subtitle.file
+            document.select("script").map { script ->
+                if (script.data().contains("eval(function(p,a,c,k,e,d)")) {
+                    val subData =
+                        getAndUnpack(script.data()).substringAfter("\"tracks\":[").substringBefore("],")
+                    AppUtils.tryParseJson<List<Tracks>>("[$subData]")?.map { subtitle ->
+                        subtitleCallback.invoke(
+                            SubtitleFile(
+                                getLanguage(subtitle.label ?: ""),
+                                subtitle.file
+                            )
                         )
-                    )
+                    }
                 }
             }
+        } catch (e: Exception) {
+            Log.e("Idlix", "Error in getUrl: ${e.message}")
+            throw e
         }
     }
 
     private fun getLanguage(str: String): String {
-        return when {
-            str.contains("indonesia", true) || str
-                .contains("bahasa", true) -> "Indonesian"
-            else -> str
+        return try {
+            when {
+                str.contains("indonesia", true) || str
+                    .contains("bahasa", true) -> "Indonesian"
+                else -> str
+            }
+        } catch (e: Exception) {
+            Log.e("Idlix", "Error in getLanguage: ${e.message}")
+            throw e
         }
     }
 
