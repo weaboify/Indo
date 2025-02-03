@@ -1,5 +1,6 @@
 // use an integer for version numbers
-version = 1
+version = 39
+
 
 cloudstream {
     language = "id"
@@ -17,11 +18,10 @@ cloudstream {
      * */
     status = 1 // will be 3 if unspecified
     tvTypes = listOf(
-        "TvSeries",
-        "Movie",
-        "Cartoon",
+        "AnimeMovie",
         "Anime",
+        "OVA",
     )
 
-    iconUrl = "https://www.google.com/s2/favicons?domain=www.dubbindo.xyz&sz=%size%"
+    iconUrl = "https://www.google.com/s2/favicons?domain=kuramanime.com&sz=%size%"
 }

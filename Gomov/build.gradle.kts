@@ -19,7 +19,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "Includes: DutaMovie, Ngefilm, Nodrakorid, Multiplex, Pusatfilm"
-    authors = listOf("tekuma25")
+    authors = listOf("TeKuma25")
 
     /**
      * Status int as the following:

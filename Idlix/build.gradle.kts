@@ -1,5 +1,6 @@
 // use an integer for version numbers
-version = 1
+version = 17
+
 
 cloudstream {
     language = "id"
@@ -19,9 +20,9 @@ cloudstream {
     tvTypes = listOf(
         "TvSeries",
         "Movie",
-        "Cartoon",
         "Anime",
+        "AsianDrama",
     )
 
-    iconUrl = "https://www.google.com/s2/favicons?domain=www.dubbindo.xyz&sz=%size%"
+    iconUrl = "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://idlixian.com&size=16"
 }

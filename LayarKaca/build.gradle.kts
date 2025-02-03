@@ -1,12 +1,13 @@
 // use an integer for version numbers
-version = 1
+version = 20
+
 
 cloudstream {
     language = "id"
     // All of these properties are optional, you can safely remove them
 
     // description = "Lorem Ipsum"
-     authors = listOf("TeKuma25")
+    authors = listOf("TeKuma25")
 
     /**
      * Status int as the following:
@@ -17,11 +18,12 @@ cloudstream {
      * */
     status = 1 // will be 3 if unspecified
     tvTypes = listOf(
+        "AsianDrama",
         "TvSeries",
         "Movie",
-        "Cartoon",
-        "Anime",
     )
 
-    iconUrl = "https://www.google.com/s2/favicons?domain=www.dubbindo.xyz&sz=%size%"
+
+    iconUrl = "https://www.google.com/s2/favicons?domain=amp.lk21official.mom&sz=%size%"
+
 }

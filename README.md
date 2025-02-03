@@ -11,12 +11,12 @@ https://raw.githubusercontent.com/tekuma25/IndoStream/builds/repo.json
 - **Animasu/**: Contains the Animasu plugin extension.
 - **Dubbindo/**: Contains the Dubbindo extension.
 - **Gomov/**: Contains the Gomov extension.
-- **IdlixProvider/**: Contains the IdlixProvider extension.
-- **KuramanimeProvider/**: Contains the KuramanimeProvider extension.
-- **LayarKacaProvider/**: Contains the LayarKacaProvider extension.
+- **Idlix/**: Contains the Idlix extension.
+- **Kuramanime/**: Contains the Kuramanime extension.
+- **LayarKaca/**: Contains the LayarKaca extension.
 - **Nimegami/**: Contains the Nimegami extension.
-- **OploverzProvider/**: Contains the OploverzProvider extension.
-- **OtakudesuProvider/**: Contains the OtakudesuProvider extension.
+- **Oploverz/**: Contains the Oploverz extension.
+- **Otakudesu/**: Contains the Otakudesu extension.
 - **Pencurimovie/**: Contains the Pencurimovie extension.
 - **Samehadaku/**: Contains the Samehadaku extension.
 - **UseeTv/**: Contains the UseeTv extension.
