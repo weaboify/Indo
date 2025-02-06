@@ -1,14 +1,16 @@
 package com.Idlix
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import org.json.JSONObject
-import java.util.*
+import java.security.MessageDigest
+import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
-import java.security.MessageDigest
-import java.util.Base64
 
 object CryptoJsAes {
+    @RequiresApi(Build.VERSION_CODES.O)
     fun decrypt(jsonStr: String, passphrase: String): String {
         val jsonData = JSONObject(jsonStr)
         val salt = jsonData.getString("s").hexStringToByteArray()
@@ -27,6 +29,7 @@ object CryptoJsAes {
         return String(cipher.doFinal(ct))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun dec(r: String, e: String): String {
         val rList = r.split("\\x").drop(1).map { it.take(2).toInt(16) }
         val mPadded = addBase64Padding(e.reversed())

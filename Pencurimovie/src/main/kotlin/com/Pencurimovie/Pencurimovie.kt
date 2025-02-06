@@ -67,7 +67,7 @@ class Pencurimovie : MainAPI() {
         val poster = document.select("meta[property=og:image]").attr("content").toString()
         val description = document.selectFirst("div.desc p.f-desc")?.text()?.trim()
         val tvtag = if (url.contains("series")) TvType.TvSeries else TvType.Movie
-        val trailer = document.select("meta[itemprop=embedUrl]").attr("content") ?: ""
+        val trailer = document.select("meta[itemprop=embedUrl]").attr("content")
         val genre = document.select("div.mvic-info p:contains(Genre)").select("a").map { it.text() }
         val actors =
             document.select("div.mvic-info p:contains(Actors)").select("a").map { it.text() }
@@ -83,15 +83,15 @@ class Pencurimovie : MainAPI() {
                 info.select("div.les-content a").forEach { it ->
                     Log.d("Phis","$it")
                     val name = it.select("a").text().substringAfter("-").trim()
-                    val href = it.select("a").attr("href") ?: ""
-                    val Rawepisode =
+                    val href = it.select("a").attr("href")
+                    val rawepisode =
                         it.select("a").text().substringAfter("Episode")
                             .substringBefore("-")
                             .trim().toIntOrNull()
                     episodes.add(
                         Episode(
                             data = href,
-                            episode = Rawepisode,
+                            episode = rawepisode,
                             name = name,
                             season = season
                         )

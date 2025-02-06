@@ -1,15 +1,15 @@
 package com.Idlix
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
-import com.lagradost.cloudstream3.extractors.helper.AesHelper
-import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
+import org.json.JSONObject
 import org.jsoup.nodes.Element
 import java.net.URI
-import android.util.Log
 
 class Idlix : MainAPI() {
     override var mainUrl = "https://tv7.idlix.asia"
@@ -18,7 +18,6 @@ class Idlix : MainAPI() {
     override val hasMainPage = true
     override var lang = "id"
     override val hasDownloadSupport = true
-    private val cloudflareKiller by lazy { CloudflareKiller() }
     override val supportedTypes = setOf(
         TvType.Movie,
         TvType.TvSeries,
@@ -189,6 +188,7 @@ class Idlix : MainAPI() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
@@ -207,25 +207,25 @@ class Idlix : MainAPI() {
                 val json = app.post(
                     url = "$directUrl/wp-admin/admin-ajax.php",
                     headers = mapOf(
-                        "Accept" to "*/*", 
+                        "Accept" to "*/*",
                         "X-Requested-With" to "XMLHttpRequest",
-                        "User-Agent" to randomUserAgent
+                        "User-Agent" to "randomUserAgent"
                     ),
                     data = mapOf(
                         "action" to "doo_player_ajax",
                         "post" to id,
                         "nume" to nume,
                         "type" to type
-                    ), 
+                    ),
                     referer = data
                 ).parsedSafe<ResponseHash>() ?: return@apmap
-                
+
                 // Gunakan CryptoJsAes untuk dekripsi
                 val key = CryptoJsAes.dec(json.key, JSONObject(json.embed_url).getString("m"))
                 val decrypted = CryptoJsAes.decrypt(json.embed_url, key)
-                
+
                 Log.d("Idlix", "Decrypted URL: $decrypted")
-                
+
                 if (!decrypted.contains("youtube")) {
                     processDecryptedUrl(decrypted, data, subtitleCallback, callback)
                 }
@@ -233,7 +233,7 @@ class Idlix : MainAPI() {
             return true
         } catch (e: Exception) {
             Log.e("Idlix", "Error in loadLinks: ${e.message}")
-            false
+            return false
         }
     }
 
@@ -249,7 +249,7 @@ class Idlix : MainAPI() {
                 url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
                 headers = mapOf(
                     "X-Requested-With" to "XMLHttpRequest",
-                    "User-Agent" to randomUserAgent
+                    "User-Agent" to "randomUserAgent"
                 ),
                 data = mapOf(
                     "hash" to hash,
