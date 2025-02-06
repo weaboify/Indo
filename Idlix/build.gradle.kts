@@ -1,5 +1,5 @@
 // use an integer for version numbers
-version = 17
+version = 18
 
 
 cloudstream {
@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     // description = "Lorem Ipsum"
-     authors = listOf("TeKuma25")
+     authors = listOf("Hexated", "TeKuma25")
 
     /**
      * Status int as the following:
@@ -24,5 +24,5 @@ cloudstream {
         "AsianDrama",
     )
 
-    iconUrl = "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://idlixian.com&size=16"
+    iconUrl = "hhttps://tv7.idlix.asia/wp-content/uploads/2020/07/logov4.png"
 }

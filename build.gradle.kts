@@ -84,7 +84,11 @@ subprojects {
         implementation("com.google.code.gson:gson:2.11.0")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
         implementation("app.cash.quickjs:quickjs-android:0.9.2")
-        
+        implementation("org.jsoup:jsoup:1.15.4") // Untuk parsing HTML
+        implementation("com.squareup.okhttp3:okhttp:4.11.0") // Untuk HTTP requests
+        implementation("org.json:json:20231013") // Untuk parsing JSON
+        implementation("androidx.core:core-ktx:1.12.0") // Untuk Log dan utilitas Android
+
     }
 }
 
