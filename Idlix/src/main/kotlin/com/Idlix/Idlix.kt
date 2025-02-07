@@ -247,11 +247,20 @@ class Idlix : MainAPI() {
     private fun createKey(r: String, m: String): String {
         val rList = r.chunked(4).map { it.substring(2) }
         val reversedM = m.reversed()
-        val decodedM = String(base64Decode(reversedM), Charsets.UTF_8)
+        
+        // [!] Perbaikan di sini: Tambahkan padding Base64 jika diperlukan
+        val paddedM = addBase64Padding(reversedM)
+        val decodedBytes = base64Decode(paddedM) // Menggunakan base64Decode dari CloudStream
+        val decodedM = String(decodedBytes, Charsets.UTF_8)
         
         return decodedM.split("|").joinToString("") { 
-            "\\x${rList.getOrNull(it.toInt()) ?: "00"}" // Handle index out of bound
+            "\\x${rList.getOrNull(it.toInt()) ?: "00"}"
         }
+    }
+
+    /** FUNGSI BANTUAN UNTUK BASE64 PADDING */
+    private fun addBase64Padding(input: String): String {
+        return input + "=".repeat((4 - input.length % 4) % 4)
     }
 
 

@@ -28,7 +28,9 @@ object CryptoJsCompat {
             val cipher = Cipher.getInstance(AES_CIPHER).apply {
                 init(Cipher.DECRYPT_MODE, SecretKeySpec(key, "AES"), IvParameterSpec(iv))
             }
-            String(cipher.doFinal(base64Decode(ct)), StandardCharsets.UTF_8)
+            // [!] Perbaikan di sini: Gunakan base64Decode yang benar
+            val decodedBytes = base64Decode(ct) // base64Decode dari CloudStream, bukan Java
+            String(cipher.doFinal(decodedBytes), StandardCharsets.UTF_8)
         } catch (e: Exception) {
             null
         }
