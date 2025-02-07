@@ -1,13 +1,11 @@
 package com.Idlix
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
+import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
-import org.json.JSONObject
 import org.jsoup.nodes.Element
 import java.net.URI
 
@@ -18,6 +16,7 @@ class Idlix : MainAPI() {
     override val hasMainPage = true
     override var lang = "id"
     override val hasDownloadSupport = true
+    private val cloudflareKiller by lazy { CloudflareKiller() }
     override val supportedTypes = setOf(
         TvType.Movie,
         TvType.TvSeries,
@@ -188,103 +187,154 @@ class Idlix : MainAPI() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        try {
-            val document = app.get(data).document
-            document.select("ul#playeroptionsul > li").map {
-                Triple(
-                    it.attr("data-post"),
-                    it.attr("data-nume"),
-                    it.attr("data-type")
-                )
-            }.apmap { (id, nume, type) ->
+        val document = app.get(data).document
+        directUrl = getBaseUrl(document.location())
+
+        document.select("ul#playeroptionsul > li").map {
+            Triple(
+                it.attr("data-post"),
+                it.attr("data-nume"),
+                it.attr("data-type")
+            )
+        }.apmap { (id, nume, type) ->
+            try {
                 val json = app.post(
                     url = "$directUrl/wp-admin/admin-ajax.php",
-                    headers = mapOf(
-                        "Accept" to "*/*",
-                        "X-Requested-With" to "XMLHttpRequest",
-                        "User-Agent" to "randomUserAgent"
-                    ),
                     data = mapOf(
                         "action" to "doo_player_ajax",
                         "post" to id,
                         "nume" to nume,
                         "type" to type
                     ),
-                    referer = data
+                    referer = data,
+                    headers = mapOf(
+                        "Accept" to "*/*",
+                        "X-Requested-With" to "XMLHttpRequest"
+                    )
                 ).parsedSafe<ResponseHash>() ?: return@apmap
 
-                // Gunakan CryptoJsAes untuk dekripsi
-                val key = CryptoJsAes.dec(json.key, JSONObject(json.embed_url).getString("m"))
-                val decrypted = CryptoJsAes.decrypt(json.embed_url, key)
+                val password = createKey(json.key, json.embed_url)
+                val decrypted = CryptoJsCompat.decrypt(json.embed_url, password)
+                    ?: return@apmap
 
-                Log.d("Idlix", "Decrypted URL: $decrypted")
+                val embedJson = AppUtils.tryParseJson<Map<String, String>>(decrypted)
+                    ?: return@apmap
+                val hash = embedJson["m"]?.split("/")?.last()
+                    ?: return@apmap
 
-                if (!decrypted.contains("youtube")) {
-                    processDecryptedUrl(decrypted, data, subtitleCallback, callback)
-                }
+                // Panggil fungsi getUrl yang terpisah
+                getUrl(
+                    url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
+                    referer = directUrl,
+                    subtitleCallback = subtitleCallback,
+                    callback = callback
+                )
+            } catch (e: Exception) {
+                println("Error processing player: ${e.message}")
             }
-            return true
-        } catch (e: Exception) {
-            Log.e("Idlix", "Error in loadLinks: ${e.message}")
-            return false
+        }
+
+        return true
+    }
+
+    /** FUNGSI CREATEKEY VERSI FIXED */
+    private fun createKey(r: String, m: String): String {
+        val rList = r.chunked(4).map { it.substring(2) }
+        val reversedM = m.reversed()
+        val decodedM = String(base64Decode(reversedM), Charsets.UTF_8)
+        
+        return decodedM.split("|").joinToString("") { 
+            "\\x${rList.getOrNull(it.toInt()) ?: "00"}" // Handle index out of bound
         }
     }
 
-    private suspend fun processDecryptedUrl(
-        decryptedUrl: String,
-        referer: String,
+
+    private fun String.fixBloat(): String {
+        return this.replace("\"", "").replace("\\", "")
+    }
+
+    private suspend fun getUrl(
+        url: String,
+        referer: String?,
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ) {
         try {
-            val hash = decryptedUrl.split("/").last()
+            // Step 1: Dapatkan link M3U8
             val m3uResponse = app.post(
-                url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
+                url = url,
+                data = mapOf("hash" to url.split("data=").last(), "r" to referer),
                 headers = mapOf(
                     "X-Requested-With" to "XMLHttpRequest",
-                    "User-Agent" to "randomUserAgent"
-                ),
-                data = mapOf(
-                    "hash" to hash,
-                    "r" to directUrl
-                ),
-                referer = referer
-            ).parsed<ResponseSource>()
-            
-            Log.d("Idlix", "M3U8 Response: ${m3uResponse.videoSource}")
-            
-            // Generate M3U8 links
+                    "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8"
+                )
+            ).parsedSafe<ResponseSource>() ?: return
+
+            // Step 2: Generate M3U8
             M3u8Helper.generateM3u8(
                 name,
                 m3uResponse.videoSource,
-                referer
+                referer ?: directUrl
             ).forEach(callback)
-            
-            // Proses subtitle
-            m3uResponse.subtitleTracks?.forEach { track ->
-                subtitleCallback.invoke(
-                    SubtitleFile(
-                        getLanguage(track.label ?: ""),
-                        track.file
+
+            // Step 3: Cari subtitle
+            val document = app.get(url, referer = referer).document
+            document.select("script").find { script ->
+                script.data().contains("eval(function(p,a,c,k,e,d)")
+            }?.let { script ->
+                val subData = getAndUnpack(script.data())
+                    .substringAfter("\"tracks\":[")
+                    .substringBefore("],")
+                
+                AppUtils.tryParseJson<List<Tracks>>("[$subData]")?.map { subtitle ->
+                    subtitleCallback.invoke(
+                        SubtitleFile(
+                            getLanguage(subtitle.label ?: ""),
+                            subtitle.file
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
-            Log.e("Idlix", "Error in processDecryptedUrl: ${e.message}")
+            println("Error in getUrl: ${e.message}")
         }
     }
 
+    /** FUNGSI BANTUAN LANGUAGE */
     private fun getLanguage(str: String): String {
         return when {
-            str.contains("indonesia", true) || str.contains("bahasa", true) -> "Indonesian"
+            str.contains("indonesia", true) -> "Indonesian"
+            str.contains("english", true) -> "English"
             else -> str
         }
     }
+
+    data class ResponseSource(
+        @JsonProperty("hls") val hls: Boolean,
+        @JsonProperty("videoSource") val videoSource: String,
+        @JsonProperty("securedLink") val securedLink: String?,
+    )
+
+    data class Tracks(
+        @JsonProperty("kind") val kind: String?,
+        @JsonProperty("file") val file: String,
+        @JsonProperty("label") val label: String?,
+    )
+
+    data class ResponseHash(
+        @JsonProperty("embed_url") val embed_url: String,
+        @JsonProperty("key") val key: String,
+    )
+
+    data class AesData(
+        @JsonProperty("m") val m: String,
+    )
+
+
 }
