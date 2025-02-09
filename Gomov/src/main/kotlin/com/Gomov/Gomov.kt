@@ -24,16 +24,16 @@ open class Gomov : MainAPI() {
     )
 
     override val mainPage = mainPageOf(
-        "$mainUrl/best-rating/page/" to "Best Rating",
-        "$mainUrl/tv/page/" to "TV Series",
-        "$mainUrl/category/asia/page/" to "Asia",
-        "$mainUrl/category/korean/" to "Korean",
-        "$mainUrl/category/india/" to "Indian",
-        "$mainUrl/category/western/" to "Western",
-        "$mainUrl/category/western-series/page/%d/" to "Western Series",
-        "$mainUrl/category/korean-series/page/%d/" to "Korean Series",
-        "$mainUrl/category/chinese-series/page/%d/" to "Chinese Series",
-        "$mainUrl/category/india-series/page/%d/" to "India Series",
+        "best-rating/page/" to "Best Rating",
+        "tv/page/" to "TV Series",
+        "category/asia/page/" to "Asia",
+        "category/korean/" to "Korean",
+        "category/india/" to "Indian",
+        "category/western/" to "Western",
+        "category/western-series/page/%d/" to "Western Series",
+        "category/korean-series/page/%d/" to "Korean Series",
+        "category/chinese-series/page/%d/" to "Chinese Series",
+        "category/india-series/page/%d/" to "India Series",
     )
 
     override suspend fun getMainPage(
