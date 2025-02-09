@@ -9,8 +9,8 @@ import org.jsoup.nodes.Element
 
 class LayarKaca : MainAPI() {
 
-    override var mainUrl = "https://amp.lk21official.mom"
-    private var seriesUrl = "https://tv12.nontondrama.click/"
+    override var mainUrl = "https://tv7.lk21.am.in"
+    private var seriesUrl = "https://tv12.nontondrama.click"
 
     override var name = "LayarKaca"
     override val hasMainPage = true
@@ -25,9 +25,12 @@ class LayarKaca : MainAPI() {
             "$mainUrl/populer/page/" to "Film Terplopuler",
             "$mainUrl/rating/page/" to "Film Berdasarkan IMDb Rating",
             "$mainUrl/most-commented/page/" to "Film Dengan Komentar Terbanyak",
-            "$seriesUrl/latest-series/page/" to "Series Terbaru",
-            "$seriesUrl/series/asian/page/" to "Film Asian Terbaru",
             "$mainUrl/latest/page/" to "Film Upload Terbaru",
+            "$seriesUrl/country/south-korea/page/" to "Drama Korea",
+            "$seriesUrl/country/china/page/" to "Series China",
+            "$seriesUrl/series/west/page/" to "Series West",
+            "$seriesUrl/populer/page/" to "Series Terpopuler",
+            "$seriesUrl/latest-series/page/" to "Series Terbaru",
     )
 
     override suspend fun getMainPage(
