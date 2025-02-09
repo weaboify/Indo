@@ -11,7 +11,7 @@ import java.net.URI
 
 open class Gomov : MainAPI() {
 
-    override var mainUrl = "https://185.173.38.216"
+    override var mainUrl = "https://gomov.lol"
 
     private var directUrl: String? = null
     override var name = "Gomov"
@@ -24,12 +24,16 @@ open class Gomov : MainAPI() {
     )
 
     override val mainPage = mainPageOf(
-        "page/%d/?s&search=advanced&post_type=movie" to "Movies",
-        "category/western-series/page/%d/" to "Western Series",
-        "tv/page/%d/" to "Tv Shows",
-        "category/korean-series/page/%d/" to "Korean Series",
-        "category/chinese-series/page/%d/" to "Chinese Series",
-        "category/india-series/page/%d/" to "India Series",
+        "$mainUrl/best-rating/page/" to "Best Rating",
+        "$mainUrl/tv/page/" to "TV Series",
+        "$mainUrl/category/asia/page/" to "Asia",
+        "$mainUrl/category/korean/" to "Korean",
+        "$mainUrl/category/india/" to "Indian",
+        "$mainUrl/category/western/" to "Western",
+        "$mainUrl/category/western-series/page/%d/" to "Western Series",
+        "$mainUrl/category/korean-series/page/%d/" to "Korean Series",
+        "$mainUrl/category/chinese-series/page/%d/" to "Chinese Series",
+        "$mainUrl/category/india-series/page/%d/" to "India Series",
     )
 
     override suspend fun getMainPage(
