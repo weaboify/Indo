@@ -15,6 +15,23 @@ class UseeTv : MainAPI() {
         TvType.Live
     )
 
+    override val mainPage = mainPageOf(
+            "$mainUrl/home/content/kids-3" to "Kids",
+            "$mainUrl/home/content/sport-4" to "Sports",
+            "$mainUrl/vodpremium/category/sport" to "VOD Sports",
+            "$mainUrl/vodpremium/category/yang-bisa-bikin-happy-minggu-ini" to "VOD Yang bisa bikin happy minggu ini",
+            "$mainUrl/vodpremium/category/fun-planet" to "VOD Fun Planet",
+            "$mainUrl/vodpremium/category/film-gratis-untuk-kamu" to "VOD Film Gratis Untuk Kamu",
+            "$mainUrl/home/content/tv-series-12" to "TV Series",
+            "$mainUrl/home/content/documentary-1" to "Documentary",
+            "$mainUrl/home/content/news-9" to "News",
+            "$mainUrl/home/content/lifestyle-5" to "Lifestyle",
+            "$mainUrl/home/content/knowledge-43" to "Knowledge",
+            "$mainUrl/home/content/movies-44" to "Movies",
+            "$mainUrl/home/content/entertainment-45" to "Entertainment",
+            "$mainUrl/home/content/music-46" to "Music",
+    )
+
     companion object {
         private const val mainLink = "https://www.indihometv.com"
     }
