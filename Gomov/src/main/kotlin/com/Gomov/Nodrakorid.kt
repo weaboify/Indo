@@ -7,6 +7,7 @@ import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.net.URI
 
 class Nodrakorid : Gomov() {
     override var mainUrl = "https://tv.nodrakor22.sbs"
