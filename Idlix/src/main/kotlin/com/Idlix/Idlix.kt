@@ -8,6 +8,7 @@ import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
 import org.jsoup.nodes.Element
 import java.net.URI
+import java.util.Base64
 
 class Idlix : MainAPI() {
     override var mainUrl = "https://tv7.idlix.asia"
@@ -220,15 +221,14 @@ class Idlix : MainAPI() {
                 ).parsedSafe<ResponseHash>() ?: return@apmap
 
                 val password = createKey(json.key, json.embed_url)
-                val decrypted = CryptoJsCompat.decrypt(json.embed_url, password)
+                val decrypted = CryptoJsAes.decrypt(json.embed_url, password)
                     ?: return@apmap
 
-                val embedJson = AppUtils.tryParseJson<Map<String, String>>(decrypted)
+                val embedJson = AppUtils.tryParseJson<Map<String, String>>(decrypted as String?)
                     ?: return@apmap
                 val hash = embedJson["m"]?.split("/")?.last()
                     ?: return@apmap
 
-                // Panggil fungsi getUrl yang terpisah
                 getUrl(
                     url = "https://jeniusplay.com/player/index.php?data=$hash&do=getVideo",
                     referer = directUrl,
@@ -247,13 +247,12 @@ class Idlix : MainAPI() {
     private fun createKey(r: String, m: String): String {
         val rList = r.chunked(4).map { it.substring(2) }
         val reversedM = m.reversed()
-        
-        // [!] Perbaikan di sini: Tambahkan padding Base64 jika diperlukan
+
         val paddedM = addBase64Padding(reversedM)
-        val decodedBytes = base64Decode(paddedM) // Menggunakan base64Decode dari CloudStream
+        val decodedBytes = Base64.getDecoder().decode(paddedM) // Menggunakan Base64.getDecoder().decode
         val decodedM = String(decodedBytes, Charsets.UTF_8)
-        
-        return decodedM.split("|").joinToString("") { 
+
+        return decodedM.split("|").joinToString("") {
             "\\x${rList.getOrNull(it.toInt()) ?: "00"}"
         }
     }
@@ -278,7 +277,10 @@ class Idlix : MainAPI() {
             // Step 1: Dapatkan link M3U8
             val m3uResponse = app.post(
                 url = url,
-                data = mapOf("hash" to url.split("data=").last(), "r" to referer),
+                data = mapOf(
+                    "hash" to url.split("data=").last(),
+                    "r" to (referer ?: "")
+                ),
                 headers = mapOf(
                     "X-Requested-With" to "XMLHttpRequest",
                     "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8"
@@ -300,7 +302,7 @@ class Idlix : MainAPI() {
                 val subData = getAndUnpack(script.data())
                     .substringAfter("\"tracks\":[")
                     .substringBefore("],")
-                
+
                 AppUtils.tryParseJson<List<Tracks>>("[$subData]")?.map { subtitle ->
                     subtitleCallback.invoke(
                         SubtitleFile(
@@ -344,6 +346,4 @@ class Idlix : MainAPI() {
     data class AesData(
         @JsonProperty("m") val m: String,
     )
-
-
 }

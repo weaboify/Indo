@@ -88,7 +88,6 @@ subprojects {
         implementation("com.squareup.okhttp3:okhttp:4.11.0") // Untuk HTTP requests
         implementation("org.json:json:20231013") // Untuk parsing JSON
         implementation("androidx.core:core-ktx:1.15.0") // Untuk Log dan utilitas Android
-        implementation("org.json:json:20231013") // Versi terbaru
 
     }
 }
