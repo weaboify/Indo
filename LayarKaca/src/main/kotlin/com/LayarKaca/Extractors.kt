@@ -21,14 +21,13 @@ open class Emturbovid : ExtractorApi() {
             callback: (ExtractorLink) -> Unit
     ) {
         val response = app.get(url, referer = referer)
-        val m3u8 = Regex("[\"'](.*?master\\.m3u8.*?)[\"']").find(response.text)?.groupValues?.getOrNull(1)
-        M3u8Helper.generateM3u8(
-                name,
-                m3u8 ?: return,
-                mainUrl
-        ).forEach(callback)
+        val m3u8 =
+                Regex("[\"'](.*?master\\.m3u8.*?)[\"']")
+                        .find(response.text)
+                        ?.groupValues
+                        ?.getOrNull(1)
+        M3u8Helper.generateM3u8(name, m3u8 ?: return, mainUrl).forEach(callback)
     }
-
 }
 
 open class Hownetwork : ExtractorApi() {
@@ -43,17 +42,18 @@ open class Hownetwork : ExtractorApi() {
             callback: (ExtractorLink) -> Unit
     ) {
         val id = url.substringAfter("id=")
-        val res = app.post(
-                "$mainUrl/api.php?id=$id",
-                data = mapOf(
-                        "r" to "https://playeriframe.shop/",
-                        "d" to "stream.hownetwork.xyz",
-                ),
-                referer = url,
-                headers = mapOf(
-                        "X-Requested-With" to "XMLHttpRequest"
-                )
-        ).parsedSafe<Sources>()
+        val res =
+                app.post(
+                                "$mainUrl/api.php?id=$id",
+                                data =
+                                        mapOf(
+                                                "r" to "https://playeriframe.shop/",
+                                                "d" to "stream.hownetwork.xyz",
+                                        ),
+                                referer = url,
+                                headers = mapOf("X-Requested-With" to "XMLHttpRequest")
+                        )
+                        .parsedSafe<Sources>()
 
         res?.data?.map {
             callback.invoke(
@@ -67,12 +67,9 @@ open class Hownetwork : ExtractorApi() {
                     )
             )
         }
-
     }
 
-    data class Sources(
-            val data: ArrayList<Data>
-    ) {
+    data class Sources(val data: ArrayList<Data>) {
         data class Data(
                 val file: String,
                 val label: String?,

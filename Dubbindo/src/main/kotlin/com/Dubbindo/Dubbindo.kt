@@ -15,37 +15,31 @@ class Dubbindo : MainAPI() {
     override var lang = "id"
     override val hasDownloadSupport = true
 
-    override val supportedTypes = setOf(
-        TvType.TvSeries,
-        TvType.Movie,
-        TvType.Cartoon,
-        TvType.Anime,
-    )
+    override val supportedTypes =
+            setOf(
+                    TvType.TvSeries,
+                    TvType.Movie,
+                    TvType.Cartoon,
+                    TvType.Anime,
+            )
 
-    override val mainPage = mainPageOf(
-        "$mainUrl/videos/category/1" to "Movie",
-        "$mainUrl/videos/category/3" to "TV Series",
-        "$mainUrl/videos/category/5" to "Anime Series",
-        "$mainUrl/videos/category/4" to "Anime Movie",
-        "$mainUrl/videos/category/other" to "Other",
-    )
+    override val mainPage =
+            mainPageOf(
+                    "$mainUrl/videos/category/1" to "Movie",
+                    "$mainUrl/videos/category/3" to "TV Series",
+                    "$mainUrl/videos/category/5" to "Anime Series",
+                    "$mainUrl/videos/category/4" to "Anime Movie",
+                    "$mainUrl/videos/category/other" to "Other",
+            )
 
-    override suspend fun getMainPage(
-        page: Int,
-        request: MainPageRequest
-    ): HomePageResponse {
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val document = app.get("${request.data}?page_id=$page").document
-        val home = document.select("div.videos-latest-list.pt_timeline_vids div.video-wrapper")
-            .mapNotNull {
-                it.toSearchResult()
-            }
+        val home =
+                document.select("div.videos-latest-list.pt_timeline_vids div.video-wrapper")
+                        .mapNotNull { it.toSearchResult() }
         return newHomePageResponse(
-            list = HomePageList(
-                name = request.name,
-                list = home,
-                isHorizontalImages = true
-            ),
-            hasNext = true
+                list = HomePageList(name = request.name, list = home, isHorizontalImages = true),
+                hasNext = true
         )
     }
 
@@ -62,13 +56,14 @@ class Dubbindo : MainAPI() {
         val searchResponse = mutableListOf<SearchResponse>()
         for (i in 1..10) {
             val document =
-                app.get(
-                    "$mainUrl/search?keyword=$query&page_id=$i",
-                ).document
-            val results = document.select("div.videos-latest-list.row div.video-wrapper")
-                .mapNotNull {
-                    it.toSearchResult()
-                }
+                    app.get(
+                                    "$mainUrl/search?keyword=$query&page_id=$i",
+                            )
+                            .document
+            val results =
+                    document.select("div.videos-latest-list.row div.video-wrapper").mapNotNull {
+                        it.toSearchResult()
+                    }
             searchResponse.addAll(results)
             if (results.isEmpty()) break
         }
@@ -82,16 +77,16 @@ class Dubbindo : MainAPI() {
         val poster = document.selectFirst("meta[property=og:image]")?.attr("content")
         val tags = document.select("div.pt_categories li a").map { it.text() }
         val description = document.select("div.watch-video-description p").text()
-        val recommendations = document.select("div.related-video-wrapper").mapNotNull {
-            it.toSearchResult()
-        }
-        val video = document.select("video#my-video source").map {
-            Video(
-                it.attr("src"),
-                it.attr("size"),
-                it.attr("type"),
-            )
-        }
+        val recommendations =
+                document.select("div.related-video-wrapper").mapNotNull { it.toSearchResult() }
+        val video =
+                document.select("video#my-video source").map {
+                    Video(
+                            it.attr("src"),
+                            it.attr("size"),
+                            it.attr("type"),
+                    )
+                }
 
         return newMovieLoadResponse(title, url, TvType.Movie, video.toJson()) {
             posterUrl = poster
@@ -102,22 +97,25 @@ class Dubbindo : MainAPI() {
     }
 
     override suspend fun loadLinks(
-        data: String,
-        isCasting: Boolean,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
+            data: String,
+            isCasting: Boolean,
+            subtitleCallback: (SubtitleFile) -> Unit,
+            callback: (ExtractorLink) -> Unit
     ): Boolean {
 
         tryParseJson<List<Video>>(data)?.map { video ->
-            if(video.type == "video/mp4" || video.type == "video/x-msvideo" || video.type == "video/x-matroska") {
+            if (video.type == "video/mp4" ||
+                            video.type == "video/x-msvideo" ||
+                            video.type == "video/x-matroska"
+            ) {
                 callback.invoke(
-                    ExtractorLink(
-                        this.name,
-                        this.name,
-                        video.src ?: return@map,
-                        "",
-                        video.res?.toIntOrNull() ?: Qualities.Unknown.value,
-                    )
+                        ExtractorLink(
+                                this.name,
+                                this.name,
+                                video.src ?: return@map,
+                                "",
+                                video.res?.toIntOrNull() ?: Qualities.Unknown.value,
+                        )
                 )
             } else {
                 loadExtractor(video.src ?: return@map, "", subtitleCallback, callback)
@@ -128,9 +126,8 @@ class Dubbindo : MainAPI() {
     }
 
     data class Video(
-        val src: String? = null,
-        val res: String? = null,
-        val type: String? = null,
+            val src: String? = null,
+            val res: String? = null,
+            val type: String? = null,
     )
-
 }

@@ -6,13 +6,12 @@ import com.lagradost.cloudstream3.apmap
 import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.base64Decode
 import com.lagradost.cloudstream3.extractors.*
+import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
-import com.lagradost.cloudstream3.utils.loadExtractor
-import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
-import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.cloudstream3.utils.getQualityFromName
+import com.lagradost.cloudstream3.utils.loadExtractor
 
 open class Uplayer : ExtractorApi() {
     override val name = "Uplayer"
@@ -20,20 +19,15 @@ open class Uplayer : ExtractorApi() {
     override val requiresReferer = true
 
     override suspend fun getUrl(
-        url: String,
-        referer: String?,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
+            url: String,
+            referer: String?,
+            subtitleCallback: (SubtitleFile) -> Unit,
+            callback: (ExtractorLink) -> Unit
     ) {
-        val res = app.get(url,referer=referer).text
+        val res = app.get(url, referer = referer).text
         val m3u8 = Regex("file:\\s*\"(.*?m3u8.*?)\"").find(res)?.groupValues?.getOrNull(1)
-        M3u8Helper.generateM3u8(
-            name,
-            m3u8 ?: return,
-            mainUrl
-        ).forEach(callback)
+        M3u8Helper.generateM3u8(name, m3u8 ?: return, mainUrl).forEach(callback)
     }
-
 }
 
 open class Kotakajaib : ExtractorApi() {
@@ -42,16 +36,20 @@ open class Kotakajaib : ExtractorApi() {
     override val requiresReferer = true
 
     override suspend fun getUrl(
-        url: String,
-        referer: String?,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
+            url: String,
+            referer: String?,
+            subtitleCallback: (SubtitleFile) -> Unit,
+            callback: (ExtractorLink) -> Unit
     ) {
-        app.get(url,referer=referer).document.select("ul#dropdown-server li a").apmap {
-            loadExtractor(base64Decode(it.attr("data-frame")), "$mainUrl/", subtitleCallback, callback)
+        app.get(url, referer = referer).document.select("ul#dropdown-server li a").apmap {
+            loadExtractor(
+                    base64Decode(it.attr("data-frame")),
+                    "$mainUrl/",
+                    subtitleCallback,
+                    callback
+            )
         }
     }
-
 }
 
 open class JWPlayer : ExtractorApi() {
@@ -62,31 +60,35 @@ open class JWPlayer : ExtractorApi() {
     override suspend fun getUrl(url: String, referer: String?): List<ExtractorLink>? {
         val sources = mutableListOf<ExtractorLink>()
         with(app.get(url).document) {
-            val data = this.select("script").mapNotNull { script ->
-                if (script.data().contains("sources: [")) {
-                    script.data().substringAfter("sources: [")
-                        .substringBefore("],").replace("'", "\"")
-                } else if (script.data().contains("otakudesu('")) {
-                    script.data().substringAfter("otakudesu('")
-                        .substringBefore("');")
-                } else {
-                    null
-                }
-            }
+            val data =
+                    this.select("script").mapNotNull { script ->
+                        if (script.data().contains("sources: [")) {
+                            script.data()
+                                    .substringAfter("sources: [")
+                                    .substringBefore("],")
+                                    .replace("'", "\"")
+                        } else if (script.data().contains("otakudesu('")) {
+                            script.data().substringAfter("otakudesu('").substringBefore("');")
+                        } else {
+                            null
+                        }
+                    }
 
             tryParseJson<List<ResponseSource>>("$data")?.map {
                 sources.add(
-                    ExtractorLink(
-                        name,
-                        name,
-                        it.file,
-                        referer = url,
-                        quality = getQualityFromName(
-                            Regex("(\\d{3,4}p)").find(it.file)?.groupValues?.get(
-                                1
-                            )
+                        ExtractorLink(
+                                name,
+                                name,
+                                it.file,
+                                referer = url,
+                                quality =
+                                        getQualityFromName(
+                                                Regex("(\\d{3,4}p)")
+                                                        .find(it.file)
+                                                        ?.groupValues
+                                                        ?.get(1)
+                                        )
                         )
-                    )
                 )
             }
         }
@@ -94,21 +96,22 @@ open class JWPlayer : ExtractorApi() {
     }
 
     private data class ResponseSource(
-        @JsonProperty("file") val file: String,
-        @JsonProperty("type") val type: String?,
-        @JsonProperty("label") val label: String?
+            @JsonProperty("file") val file: String,
+            @JsonProperty("type") val type: String?,
+            @JsonProperty("label") val label: String?
     )
+}
 
+//DutaMovie
+
+class Embedfirex : JWPlayer() {
+    override var name = "Embedfirex"
+    override var mainUrl = "https://embedfirex.xyz"
 }
 
 class Doods : DoodLaExtractor() {
     override var name = "Doods"
     override var mainUrl = "https://doods.pro"
-}
-
-class Dutamovie21 : StreamSB() {
-    override var name = "Dutamovie21"
-    override var mainUrl = "https://scandal.dutamovie21.tv"
 }
 
 class FilelionsTo : Filesim() {
@@ -140,7 +143,14 @@ class DbGdriveplayer : Gdriveplayer() {
     override var mainUrl = "https://database.gdriveplayer.us"
 }
 
+// nodrakorid extractor
+
 class Asiaplayer : JWPlayer() {
     override val name = "Asiaplayer"
     override val mainUrl = "https://watch.asiaplayer.cc"
+}
+
+class Ryderjet : JWPlayer() {
+    override val name = "Ryderjet"
+    override val mainUrl = "https://ryderjet.com"
 }

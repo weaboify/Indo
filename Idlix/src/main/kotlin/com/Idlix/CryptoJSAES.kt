@@ -9,9 +9,9 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 data class EncryptedData(
-    @JsonProperty("ct") val ct: String,
-    @JsonProperty("iv") val iv: String,
-    @JsonProperty("s") val s: String
+        @JsonProperty("ct") val ct: String,
+        @JsonProperty("iv") val iv: String,
+        @JsonProperty("s") val s: String
 )
 
 object CryptoJsAes {
@@ -33,11 +33,12 @@ object CryptoJsAes {
         cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), IvParameterSpec(iv))
         val encryptedData = cipher.doFinal(objectMapper.writeValueAsBytes(value))
 
-        val encryptedDataObj = EncryptedData(
-            ct = Base64.getEncoder().encodeToString(encryptedData),
-            iv = iv.toHex(),
-            s = salt.toHex()
-        )
+        val encryptedDataObj =
+                EncryptedData(
+                        ct = Base64.getEncoder().encodeToString(encryptedData),
+                        iv = iv.toHex(),
+                        s = salt.toHex()
+                )
 
         return objectMapper.writeValueAsString(encryptedDataObj)
     }
@@ -50,9 +51,7 @@ object CryptoJsAes {
 
         val concatedPassphrase = passphrase.toByteArray() + salt
         var result = MessageDigest.getInstance("MD5").digest(concatedPassphrase)
-        repeat(2) {
-            result += MessageDigest.getInstance("MD5").digest(result + concatedPassphrase)
-        }
+        repeat(2) { result += MessageDigest.getInstance("MD5").digest(result + concatedPassphrase) }
         val key = result.copyOfRange(0, 32)
 
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
@@ -68,21 +67,25 @@ object CryptoJsAes {
     }
 
     private fun ByteArray.toHex(): String = joinToString("") { "%02x".format(it) }
-    private fun String.hexToByteArray(): ByteArray = chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+    private fun String.hexToByteArray(): ByteArray =
+            chunked(2).map { it.toInt(16).toByte() }.toByteArray()
 }
 
-fun addBase64Padding(b64String: String): String = b64String + "=".repeat((4 - b64String.length % 4) % 4)
+fun addBase64Padding(b64String: String): String =
+        b64String + "=".repeat((4 - b64String.length % 4) % 4)
 
 fun dec(r: String, e: String): String {
     val rList = r.chunked(2).filterIndexed { index, _ -> index % 2 == 0 }
     val mPadded = addBase64Padding(e.reversed())
-    val decodedM = try {
-        String(Base64.getDecoder().decode(mPadded))
-    } catch (e: IllegalArgumentException) {
-        println("Base64 decoding error: ${e.message}")
-        return ""
-    }
+    val decodedM =
+            try {
+                String(Base64.getDecoder().decode(mPadded))
+            } catch (e: IllegalArgumentException) {
+                println("Base64 decoding error: ${e.message}")
+                return ""
+            }
 
-    return decodedM.split("|").filter { it.toIntOrNull() != null && it.toInt() < rList.size }
-        .joinToString("") { "\\x${rList[it.toInt()]}" }
+    return decodedM.split("|")
+            .filter { it.toIntOrNull() != null && it.toInt() < rList.size }
+            .joinToString("") { "\\x${rList[it.toInt()]}" }
 }

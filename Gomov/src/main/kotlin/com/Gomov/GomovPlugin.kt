@@ -1,22 +1,27 @@
 package com.Gomov
 
+import android.content.Context
+import com.lagradost.cloudstream3.extractors.Chillx
+import com.lagradost.cloudstream3.extractors.YoutubeExtractor
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
-import android.content.Context
 
 @CloudstreamPlugin
-class GomovPlugin: Plugin() {
+class GomovPlugin : Plugin() {
     override fun load(context: Context) {
-        // All providers should be added in this manner. Please don't edit the providers list directly.
+        // All providers should be added in this manner. Please don't edit the providers list
+        // directly.
         registerMainAPI(Gomov())
         registerMainAPI(DutaMovie())
         registerMainAPI(Ngefilm())
         registerMainAPI(Nodrakorid())
         registerMainAPI(Pusatfilm())
+        registerExtractorAPI(Embedfirex())
+        registerExtractorAPI(YoutubeExtractor())
+        registerExtractorAPI(Chillx())
         registerExtractorAPI(FilelionsTo())
         registerExtractorAPI(Likessb())
         registerExtractorAPI(DbGdriveplayer())
-        registerExtractorAPI(Dutamovie21())
         registerExtractorAPI(Embedwish())
         registerExtractorAPI(Doods())
         registerExtractorAPI(Lylxan())

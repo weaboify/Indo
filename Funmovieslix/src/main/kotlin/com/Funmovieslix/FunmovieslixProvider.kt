@@ -1,12 +1,12 @@
 package com.Funmovieslix
 
-import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
-import com.lagradost.cloudstream3.plugins.Plugin
 import android.content.Context
 import com.lagradost.cloudstream3.extractors.FileMoonIn
+import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 
 @CloudstreamPlugin
-class FunmovieslixProvider: Plugin() {
+class FunmovieslixProvider : Plugin() {
     override fun load(context: Context) {
         registerMainAPI(Funmovieslix())
         registerExtractorAPI(Ryderjet())

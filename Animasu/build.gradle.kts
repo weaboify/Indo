@@ -1,7 +1,6 @@
 // use an integer for version numbers
 version = 10
 
-
 cloudstream {
     language = "id"
     // All of these properties are optional, you can safely remove them
