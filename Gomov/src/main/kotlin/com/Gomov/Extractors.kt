@@ -1,55 +1,120 @@
 package com.Gomov
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.lagradost.cloudstream3.SubtitleFile
-import com.lagradost.cloudstream3.apmap
+import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.app
-import com.lagradost.cloudstream3.base64Decode
-import com.lagradost.cloudstream3.extractors.*
+import com.lagradost.cloudstream3.extractors.helper.AesHelper.cryptoAESHandler
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
 import com.lagradost.cloudstream3.utils.getQualityFromName
-import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.SubtitleFile
+import com.lagradost.cloudstream3.USER_AGENT
+import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.utils.*
+import com.lagradost.cloudstream3.utils.M3u8Helper.Companion.generateM3u8
 
-open class Uplayer : ExtractorApi() {
-    override val name = "Uplayer"
-    override val mainUrl = "https://uplayer.xyz"
-    override val requiresReferer = true
-
-    override suspend fun getUrl(
-            url: String,
-            referer: String?,
-            subtitleCallback: (SubtitleFile) -> Unit,
-            callback: (ExtractorLink) -> Unit
-    ) {
-        val res = app.get(url, referer = referer).text
-        val m3u8 = Regex("file:\\s*\"(.*?m3u8.*?)\"").find(res)?.groupValues?.getOrNull(1)
-        M3u8Helper.generateM3u8(name, m3u8 ?: return, mainUrl).forEach(callback)
-    }
+class Watchx : Chillx() {
+    override val name = "Watchx"
+    override val mainUrl = "https://watchx.top"
 }
 
-open class Kotakajaib : ExtractorApi() {
-    override val name = "Kotakajaib"
-    override val mainUrl = "https://kotakajaib.me"
+class Boosterx : Chillx() {
+    override val name = "Boosterx"
+    override val mainUrl = "https://boosterx.stream"
+    override val requiresReferer = true
+}
+
+open class Chillx : ExtractorApi() {
+    override val name = "Chillx"
+    override val mainUrl = "https://chillx.top"
     override val requiresReferer = true
 
+    companion object {
+        private var key: String? = null
+
+        suspend fun fetchKey(): String {
+            return if (key != null) {
+                key!!
+            } else {
+                val fetch =
+                        app.get(
+                                        "https://raw.githubusercontent.com/rushi-chavan/multi-keys/keys/keys.json"
+                                )
+                                .parsedSafe<Keys>()
+                                ?.key
+                                ?.get(0)
+                                ?: throw ErrorLoadingException("Unable to get key")
+                key = fetch
+                key!!
+            }
+        }
+    }
+
+    @Suppress("NAME_SHADOWING")
     override suspend fun getUrl(
             url: String,
             referer: String?,
             subtitleCallback: (SubtitleFile) -> Unit,
             callback: (ExtractorLink) -> Unit
     ) {
-        app.get(url, referer = referer).document.select("ul#dropdown-server li a").apmap {
-            loadExtractor(
-                    base64Decode(it.attr("data-frame")),
-                    "$mainUrl/",
-                    subtitleCallback,
-                    callback
-            )
+        val master =
+                Regex("""JScript[\w+]?\s*=\s*'([^']+)""")
+                        .find(
+                                app.get(
+                                                url,
+                                                referer = url,
+                                        )
+                                        .text
+                        )
+                        ?.groupValues
+                        ?.get(1)
+        val key = fetchKey()
+        val decrypt =
+                cryptoAESHandler(master ?: "", key.toByteArray(), false)?.replace("\\", "")
+                        ?: throw ErrorLoadingException("failed to decrypt")
+        val source = Regex(""""?file"?:\s*"([^"]+)""").find(decrypt)?.groupValues?.get(1)
+        val subtitles = Regex("""subtitle"?:\s*"([^"]+)""").find(decrypt)?.groupValues?.get(1)
+        val subtitlePattern = """\[(.*?)](https?://[^\s,]+)""".toRegex()
+        val matches = subtitlePattern.findAll(subtitles ?: "")
+        val languageUrlPairs =
+                matches
+                        .map { matchResult ->
+                            val (language, url) = matchResult.destructured
+                            decodeUnicodeEscape(language) to url
+                        }
+                        .toList()
+
+        languageUrlPairs.forEach { (name, file) ->
+            subtitleCallback.invoke(SubtitleFile(name, file))
         }
+        // required
+        val headers =
+                mapOf(
+                        "Accept" to "*/*",
+                        "Connection" to "keep-alive",
+                        "Sec-Fetch-Dest" to "empty",
+                        "Sec-Fetch-Mode" to "cors",
+                        "Sec-Fetch-Site" to "cross-site",
+                        "Origin" to mainUrl,
+                )
+
+        M3u8Helper.generateM3u8(name, source ?: return, "$mainUrl/", headers = headers)
+                .forEach(callback)
     }
+
+    private fun decodeUnicodeEscape(input: String): String {
+        val regex = Regex("u([0-9a-fA-F]{4})")
+        return regex.replace(input) { it.groupValues[1].toInt(16).toChar().toString() }
+    }
+
+    data class Keys(@JsonProperty("chillx") val key: List<String>)
+}
+
+class Dhtpre : JWPlayer() {
+    override val name = "Dhtpre"
+    override val mainUrl = "https://dhtpre.com"
 }
 
 open class JWPlayer : ExtractorApi() {
@@ -102,55 +167,49 @@ open class JWPlayer : ExtractorApi() {
     )
 }
 
-//DutaMovie
+class Filelions : VidHidePro() {
+    override var mainUrl = "https://filelions.site"
 
-class Embedfirex : JWPlayer() {
-    override var name = "Embedfirex"
-    override var mainUrl = "https://embedfirex.xyz"
-}
+open class VidHidePro : ExtractorApi() {
+    override val name = "VidHidePro"
+    override val mainUrl = "https://vidhidepro.com"
+    override val requiresReferer = true
 
-class Doods : DoodLaExtractor() {
-    override var name = "Doods"
-    override var mainUrl = "https://doods.pro"
-}
+    override suspend fun getUrl(
+            url: String,
+            referer: String?,
+            subtitleCallback: (SubtitleFile) -> Unit,
+            callback: (ExtractorLink) -> Unit
+    ) {
+        val headers =
+                mapOf(
+                        "Accept" to "*/*",
+                        "Connection" to "keep-alive",
+                        "Sec-Fetch-Dest" to "empty",
+                        "Sec-Fetch-Mode" to "cors",
+                        "Sec-Fetch-Site" to "cross-site",
+                        "Origin" to "$mainUrl/",
+                        "User-Agent" to USER_AGENT,
+                )
 
-class FilelionsTo : Filesim() {
-    override val name = "Filelions"
-    override var mainUrl = "https://filelions.to"
-}
+        val response = app.get(getEmbedUrl(url), referer = referer)
+        val script =
+                if (!getPacked(response.text).isNullOrEmpty()) {
+                    getAndUnpack(response.text)
+                } else {
+                    response.document.selectFirst("script:containsData(sources:)")?.data()
+                }
+        val m3u8 =
+                Regex("file:\\s*\"(.*?m3u8.*?)\"").find(script ?: return)?.groupValues?.getOrNull(1)
+        generateM3u8(name, m3u8 ?: return, mainUrl, headers = headers).forEach(callback)
+    }
 
-class FilelionsOn : Filesim() {
-    override val name = "Filelions"
-    override var mainUrl = "https://filelions.online"
-}
-
-class Lylxan : Filesim() {
-    override val name = "Lylxan"
-    override var mainUrl = "https://lylxan.com"
-}
-
-class Embedwish : Filesim() {
-    override val name = "Embedwish"
-    override var mainUrl = "https://embedwish.com"
-}
-
-class Likessb : StreamSB() {
-    override var name = "Likessb"
-    override var mainUrl = "https://likessb.com"
-}
-
-class DbGdriveplayer : Gdriveplayer() {
-    override var mainUrl = "https://database.gdriveplayer.us"
-}
-
-// nodrakorid extractor
-
-class Asiaplayer : JWPlayer() {
-    override val name = "Asiaplayer"
-    override val mainUrl = "https://watch.asiaplayer.cc"
-}
-
-class Ryderjet : JWPlayer() {
-    override val name = "Ryderjet"
-    override val mainUrl = "https://ryderjet.com"
+    private fun getEmbedUrl(url: String): String {
+        return when {
+            url.contains("/d/") -> url.replace("/d/", "/v/")
+            url.contains("/download/") -> url.replace("/download/", "/v/")
+            url.contains("/file/") -> url.replace("/file/", "/v/")
+            else -> url.replace("/f/", "/v/")
+        }
+    }
 }
