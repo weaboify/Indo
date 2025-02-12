@@ -3,22 +3,10 @@ import org.jetbrains.kotlin.konan.properties.Properties
 // use an integer for version numbers
 version = 1
 
-android {
-    buildFeatures {
-        buildConfig = true
-    }
-    defaultConfig {
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "ZSHOW_API", "\"${properties.getProperty("ZSHOW_API")}\"")
-    }
-}
-
 cloudstream {
-    language = "id"
     // All of these properties are optional, you can safely remove them
-
     description = "Pusatfilm is a plugin that provides streaming links for movies and TV series."
+    language = "id"
     authors = listOf("Hexated", "TeKuma25")
 
     /**

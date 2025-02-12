@@ -1,24 +1,11 @@
-import org.jetbrains.kotlin.konan.properties.Properties
-
 // use an integer for version numbers
-version = 33
-
-android {
-    buildFeatures {
-        buildConfig = true
-    }
-    defaultConfig {
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "ZSHOW_API", "\"${properties.getProperty("ZSHOW_API")}\"")
-    }
-}
+version = 1
 
 cloudstream {
-    language = "id"
     // All of these properties are optional, you can safely remove them
 
-    description = "Nodrakorid is a plugin that provides streaming links for Korean dramas and movies."
+    description = "Nodrakorid"
+    language = "id"
     authors = listOf("Hexated", "TeKuma25")
 
     /**

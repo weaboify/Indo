@@ -2,7 +2,7 @@ package com.Dutamovie
 
 import com.lagradost.cloudstream3.*
 
-class DutaMovie : Gomov() {
+class DutaMovie : MainAPI() {
 
     override var mainUrl = "https://scandal.dutamovie21.tv"
     override var name = "DutaMovie"
