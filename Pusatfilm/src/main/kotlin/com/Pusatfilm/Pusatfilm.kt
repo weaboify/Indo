@@ -1,11 +1,11 @@
-package com.Gomov
+package com.Pusatfilm
 
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.LoadResponse
 import com.lagradost.cloudstream3.TvSeriesLoadResponse
 
-class Pusatfilm : Gomov() {
+class Pusatfilm : MainAPI() {
 
     override var mainUrl = "http://pf21.net"
 

@@ -1,15 +1,17 @@
-package com.Gomov
+package com.Nodrakorid
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.TvType
+import com.lagradost.cloudstream3.mainPageOf
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import java.net.URI
 import org.jsoup.nodes.Element
 
-class Nodrakorid : Gomov() {
+class Nodrakorid : MainAPI() {
     override var mainUrl = "https://tv.nodrakor22.sbs"
     override var name = "Nodrakorid"
     override val supportedTypes = setOf(TvType.Movie)
@@ -23,7 +25,8 @@ class Nodrakorid : Gomov() {
             )
 
     override suspend fun load(url: String): LoadResponse {
-        return super.load(url).apply {
+        val response = super.load(url) ?: throw Exception("Failed to load response")
+        return response.apply {
             when (this) {
                 is TvSeriesLoadResponse -> {
                     val doc = app.get(url).document

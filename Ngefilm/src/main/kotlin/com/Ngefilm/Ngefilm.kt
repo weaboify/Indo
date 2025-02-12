@@ -1,12 +1,17 @@
-package com.Gomov
+package com.Ngefilm
 
+import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.mainPageOf
 
-class Ngefilm : Gomov() {
+class Ngefilm : MainAPI() {
 
     override var mainUrl = "https://new1.ngefilm.online"
 
     override var name = "Ngefilm"
+    override val hasMainPage = true
+    override var lang = "id"
+    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.AsianDrama)
     override val mainPage =
             mainPageOf(
                     "/page/%d/?s&search=advanced&post_type=movie&index&orderby&genre&movieyear&country&quality=" to
