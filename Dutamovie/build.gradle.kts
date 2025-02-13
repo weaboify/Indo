@@ -22,5 +22,5 @@ cloudstream {
         "Movie",
     )
 
-    iconUrl = "https://scandal.dutamovie21.cc/wp-content/uploads/2023/03/logo-dutamovie21.png"
+    iconUrl = "https://www.google.com/s2/favicons?domain=scandal.dutamovie21.tv&sz=256"
 }
