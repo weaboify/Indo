@@ -2,19 +2,18 @@ package com.Gomov
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.SubtitleFile
+import com.lagradost.cloudstream3.USER_AGENT
 import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.extractors.VidHidePro
 import com.lagradost.cloudstream3.extractors.helper.AesHelper.cryptoAESHandler
+import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
-import com.lagradost.cloudstream3.utils.getQualityFromName
-import com.lagradost.cloudstream3.SubtitleFile
-import com.lagradost.cloudstream3.USER_AGENT
-import com.lagradost.cloudstream3.app
-import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.M3u8Helper.Companion.generateM3u8
-import com.lagradost.cloudstream3.extractors.VidHidePro
+import com.lagradost.cloudstream3.utils.getQualityFromName
 
 class Watchx : Chillx() {
     override val name = "Watchx"
@@ -170,6 +169,7 @@ open class JWPlayer : ExtractorApi() {
 
 class Filelions : VidHidePro() {
     override var mainUrl = "https://filelions.site"
+}
 
 open class VidHidePro : ExtractorApi() {
     override val name = "VidHidePro"
