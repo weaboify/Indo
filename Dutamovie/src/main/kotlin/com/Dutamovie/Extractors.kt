@@ -1,6 +1,12 @@
 package com.Dutamovie
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.extractors.JWPlayer
+import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
+import com.lagradost.cloudstream3.utils.ExtractorApi
+import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.getQualityFromName
 
 class Embedfirex : JWPlayer() {
     override var name = "Embedfirex"
