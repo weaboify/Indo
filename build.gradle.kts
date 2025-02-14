@@ -11,9 +11,9 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("com.android.tools.build:gradle:8.8.0")
         classpath("com.github.recloudstream:gradle:-SNAPSHOT")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10")
     }
 }
 
@@ -36,14 +36,14 @@ subprojects {
 
     cloudstream {
         setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/tekuma25/Indostream")
-        authors = listOf("tekuma25")
+        authors = listOf("TeKuma25")
     }
 
     android {
         namespace = "com.tekuma25"
 
         defaultConfig {
-            minSdk = 21
+            minSdk = 26
             compileSdkVersion(35)
             targetSdk = 35
 

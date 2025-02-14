@@ -1,4 +1,4 @@
-package com.Gomov
+package com.gomov
 
 import android.content.Context
 import com.lagradost.cloudstream3.extractors.Chillx

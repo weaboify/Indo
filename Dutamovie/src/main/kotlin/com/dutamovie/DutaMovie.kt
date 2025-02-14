@@ -1,4 +1,4 @@
-package com.Dutamovie
+package com.dutamovie
 
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
@@ -13,13 +13,15 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import java.net.URI
 import org.jsoup.nodes.Element
 
+
 class DutaMovie : MainAPI() {
 
-    override var mainUrl = "https://scandal.dutamovie21.tv"
+    override var mainUrl = "https://scandal.dutamovie21.cc"
     private var directUrl: String? = null
     override var name = "DutaMovie"
+    override val hasMainPage = true
     override var lang = "id"
-    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.AsianDrama)
+    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Anime, TvType.AsianDrama)
 
     override val mainPage =
             mainPageOf(
@@ -210,7 +212,7 @@ class DutaMovie : MainAPI() {
         return true
     }
 
-    private fun Element.getImageAttr(): String? {
+    private fun Element.getImageAttr(): String {
         return when {
             this.hasAttr("data-src") -> this.attr("abs:data-src")
             this.hasAttr("data-lazy-src") -> this.attr("abs:data-lazy-src")

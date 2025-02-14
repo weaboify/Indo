@@ -1,4 +1,4 @@
-package com.Animasu
+package com.animasu
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*

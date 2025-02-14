@@ -1,4 +1,4 @@
-package com.Dubbindo
+package com.dubbindo
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

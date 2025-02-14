@@ -1,4 +1,4 @@
-package com.Idlix
+package com.idlix
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
@@ -9,27 +9,8 @@ import com.lagradost.cloudstream3.utils.*
 import java.net.URI
 import java.util.Base64
 import org.jsoup.nodes.Element
+import com.lagradost.cloudstream3.Episode
 
-// Definisikan header di awal program
-val BASE_STATIC_HEADERS =
-        mapOf(
-                "Host" to "tv2.idlix.asia",
-                "Connection" to "keep-alive",
-                "sec-ch-ua" to "Not)A;Brand;v=99, Google Chrome;v=127, Chromium;v=127",
-                "sec-ch-ua-mobile" to "?0",
-                "sec-ch-ua-platform" to "Windows",
-                "Upgrade-Insecure-Requests" to "1",
-                "User-Agent" to
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
-                "Accept" to
-                        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                "Sec-Fetch-Site" to "same-origin",
-                "Sec-Fetch-Mode" to "navigate",
-                "Sec-Fetch-User" to "?1",
-                "Sec-Fetch-Dest" to "document",
-                "Referer" to "https://tv2.idlix.asia/",
-                "Accept-Language" to "en-US,en;q=0.9,id;q=0.8"
-        )
 
 class Idlix : MainAPI() {
     override var mainUrl = "https://tv7.idlix.asia"
@@ -38,7 +19,6 @@ class Idlix : MainAPI() {
     override val hasMainPage = true
     override var lang = "id"
     override val hasDownloadSupport = true
-    private val cloudflareKiller by lazy { CloudflareKiller() }
     override val supportedTypes =
             setOf(TvType.Movie, TvType.TvSeries, TvType.Anime, TvType.AsianDrama)
 
@@ -299,9 +279,6 @@ class Idlix : MainAPI() {
         return input + "=".repeat((4 - input.length % 4) % 4)
     }
 
-    private fun String.fixBloat(): String {
-        return this.replace("\"", "").replace("\\", "")
-    }
 
     private suspend fun getUrl(
             url: String,

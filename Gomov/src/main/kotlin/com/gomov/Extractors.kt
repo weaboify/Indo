@@ -1,4 +1,4 @@
-package com.Gomov
+package com.gomov
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*

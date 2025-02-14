@@ -1,4 +1,4 @@
-package com.Idlix
+package com.idlix
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.SubtitleFile

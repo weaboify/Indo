@@ -1,4 +1,4 @@
-package com.Kuramanime
+package com.kuramanime
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

@@ -1,4 +1,4 @@
-package com.LayarKaca
+package com.layarkaca
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
