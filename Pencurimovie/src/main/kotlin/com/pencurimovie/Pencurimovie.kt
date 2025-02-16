@@ -1,4 +1,4 @@
-package com.Pencurimovie
+package com.pencurimovie
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.*

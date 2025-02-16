@@ -1,4 +1,4 @@
-package com.Oploverz
+package com.oploverz
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

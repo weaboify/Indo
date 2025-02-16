@@ -1,4 +1,4 @@
-package com.Funmovieslix
+package com.funmovieslix
 
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.*

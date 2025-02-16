@@ -1,4 +1,4 @@
-package com.Otakudesu
+package com.otakudesu
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

@@ -1,4 +1,4 @@
-package com.Pusatfilm
+package com.pusatfilm
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

@@ -1,4 +1,4 @@
-package com.Funmovieslix
+package com.funmovieslix
 
 import android.content.Context
 import com.lagradost.cloudstream3.extractors.FileMoonIn

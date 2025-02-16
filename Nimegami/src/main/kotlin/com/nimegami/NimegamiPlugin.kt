@@ -1,4 +1,4 @@
-package com.Nimegami
+package com.nimegami
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin

@@ -13,7 +13,6 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import java.net.URI
 import org.jsoup.nodes.Element
 
-
 class DutaMovie : MainAPI() {
 
     override var mainUrl = "https://scandal.dutamovie21.cc"
@@ -21,7 +20,8 @@ class DutaMovie : MainAPI() {
     override var name = "DutaMovie"
     override val hasMainPage = true
     override var lang = "id"
-    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Anime, TvType.AsianDrama)
+    override val supportedTypes =
+            setOf(TvType.Movie, TvType.TvSeries, TvType.Anime, TvType.AsianDrama)
 
     override val mainPage =
             mainPageOf(

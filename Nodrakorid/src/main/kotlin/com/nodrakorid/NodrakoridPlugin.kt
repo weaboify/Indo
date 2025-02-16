@@ -1,4 +1,4 @@
-package com.Nodrakorid
+package com.nodrakorid
 
 import android.content.Context
 import com.lagradost.cloudstream3.extractors.Chillx

@@ -1,4 +1,4 @@
-package com.Samehadaku
+package com.samehadaku
 
 import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
