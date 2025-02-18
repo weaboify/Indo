@@ -39,10 +39,33 @@ class AnimeIndo : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-        "episode-terbaru" to "Episode Terbaru",
-        "ongoing" to "Anime Ongoing",
-        "populer" to "Anime Populer",
-        "donghua-terbaru" to "Donghua Terbaru",
+        "$mainUrl/page/" to "Latest Release",
+        "$mainUrl/genres/action/page/" to "Action",
+        "$mainUrl/genres/adventure/page/" to "Adventure",
+        "$mainUrl/genres/comedy/page/" to "Comedy",
+        "$mainUrl/genres/drama/page/" to "Drama",
+        "$mainUrl/genres/ecchi/page/" to "Ecchi",
+        "$mainUrl/genres/fantasy/page/" to "Fantasy",
+        "$mainUrl/genres/horror/page/" to "Horror",
+        "$mainUrl/genres/isekai/page/" to "Isekai",
+        "$mainUrl/genres/magic/page/" to "Magic",
+        "$mainUrl/genres/martial-arts/page/" to "Martial Arts",
+        "$mainUrl/genres/mecha/page/" to "Mecha",
+        "$mainUrl/genres/mystery/page/" to "Mystery",
+        "$mainUrl/genres/psychological/page/" to "Psychological",
+        "$mainUrl/genres/romance/page/" to "Romance",
+        "$mainUrl/genres/sci-fi/page/" to "Sci-Fi",
+        "$mainUrl/genres/seinen/page/" to "Seinen",
+        "$mainUrl/genres/shoujo/page/" to "Shoujo",
+        "$mainUrl/genres/shoujo-ai/page/" to "Shoujo Ai",
+        "$mainUrl/genres/shounen/page/" to "Shounen",
+        "$mainUrl/genres/shounen-ai/page/" to "Shounen Ai",
+        "$mainUrl/genres/slice-of-life/page/" to "Slice Of Life",
+        "$mainUrl/genres/sports/page/" to "Sports",
+        "$mainUrl/genres/super-power/page/" to "Super Power",
+        "$mainUrl/genres/vampire/page/" to "Vampire",
+        "$mainUrl/genres/yaoi/page/" to "Yaoi",
+        "$mainUrl/genres/yuri/page/" to "Yuri",
     )
 
     override suspend fun getMainPage(

@@ -39,11 +39,11 @@ class Anoboy : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-        "&limit=12&action=load_movie_last_update&status=Ongoing" to "Episode Baru",
-        "&limit=15&action=load_movie_last_update&status=Completed" to "Completed",
-        "&limit=15&action=load_movie_last_update&type=Live Action" to "Live Action",
-        "&limit=15&action=load_movie_trending" to "Trending"
-    )
+        "$mainUrl/page/" to "Latest Release",
+        "$mainUrl/category/anime-movie/page/" to "Anime Movie",
+        "$mainUrl/category/live-action-movie/page/" to "Live Action Movie",
+        "$mainUrl/category/anime/page/" to "Anime",
+        )
 
     override suspend fun getMainPage(
         page: Int,
