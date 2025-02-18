@@ -237,9 +237,9 @@ class Idlix : MainAPI() {
                                         .parsedSafe<ResponseHash>()
                                         ?: return@apmap
 
-                        val password = createKey(json.key, json.embed_url)
+                        val password = createKey(json.key, json.embedurl)
                         val decrypted =
-                                CryptoJsAes.decrypt(json.embed_url, password) ?: return@apmap
+                                CryptoJsAes.decrypt(json.embedurl, password) ?: return@apmap
 
                         val embedJson =
                                 AppUtils.tryParseJson<Map<String, String>>(decrypted as String?)
@@ -353,7 +353,7 @@ class Idlix : MainAPI() {
     )
 
     data class ResponseHash(
-            @JsonProperty("embed_url") val embed_url: String,
+            @JsonProperty("embedurl") val embedurl: String,
             @JsonProperty("key") val key: String,
     )
 

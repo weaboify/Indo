@@ -1,4 +1,4 @@
-package com.UseeTv
+package com.useetv
 
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.ExtractorLink
