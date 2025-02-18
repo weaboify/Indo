@@ -61,7 +61,7 @@ open class Rebahin : MainAPI() {
         return HomePageResponse(items)
     }
 
-    private fun Element.toSearchResult(): SearchResponse? {
+    fun Element.toSearchResult(): SearchResponse? {
         val title = this.selectFirst("span.mli-info > h2")?.text() ?: return null
         val href = this.selectFirst("a")!!.attr("href")
         val type =
