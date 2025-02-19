@@ -34,11 +34,32 @@ class AnimeIndo : MainAPI() {
 
     override val mainPage =
             mainPageOf(
-                    "episode-terbaru" to "Episode Terbaru",
-                    "ongoing" to "Anime Ongoing",
-                    "populer" to "Anime Populer",
-                    "donghua-terbaru" to "Donghua Terbaru",
-            )
+                    "$mainUrl/genres/action/page/%d" to "Action",
+                    "$mainUrl/genres/adult-cast/" to "Adult Cast",
+                    "$mainUrl/genres/adventure/page/%d" to "Adventure",
+                    "$mainUrl/genres/Award-Winning/" to "Award Winning",
+                    "$mainUrl/genres/comedy/page/%d" to "Comedy",
+                    "$mainUrl/genres/drama/page/%d" to "Drama",
+                    "$mainUrl/genres/ecchi/" to "Ecchi",
+                    "$mainUrl/genres/isekai/page/%d" to "Isekai",
+                    "$mainUrl/genres/fantasy/page/%d" to "Fantasy",
+                    "$mainUrl/genres/harem/page/%d" to "Harem",
+                    "$mainUrl/genres/historical/page/%d" to "Historical",
+                    "$mainUrl/genres/martial-arts/page/%d" to "Martial Arts",
+                    "$mainUrl/genres/military/page/%d" to "Military",
+                    "$mainUrl/genres/music/page/%d" to "Music",
+                    "$mainUrl/genres/mystery/page/%d" to "Mystery",
+                    "$mainUrl/genres/parody/page/%d" to "Parody",
+                    "$mainUrl/genres/psychological/page/%d" to "Psychological",
+                    "$mainUrl/genres/romance/page/%d" to "Romance",
+                    "$mainUrl/genres/school/page/%d" to "School",
+                    "$mainUrl/genres/sci-fi/page/%d" to "Sci-Fi",
+                    "$mainUrl/genres/sports/page/%d" to "Sports",
+                    //  "episode-terbaru" to "Episode Terbaru",
+                    //  "ongoing" to "Anime Ongoing",
+                    //  "populer" to "Anime Populer",
+                    //  "donghua-terbaru" to "Donghua Terbaru",
+                    )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val document = app.get("$mainUrl/${request.data}/page/$page").document
