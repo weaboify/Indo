@@ -2,20 +2,18 @@ package com.idlix
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
-import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.*
 import java.net.URI
 import java.util.Base64
 import org.jsoup.nodes.Element
-import com.lagradost.cloudstream3.Episode
-
 
 class Idlix : MainAPI() {
     override var mainUrl = "https://tv7.idlix.asia"
     private var directUrl = mainUrl
-    override var name = "Idlix"
+    override var name = "Idlix Asia"
     override val hasMainPage = true
     override var lang = "id"
     override val hasDownloadSupport = true
@@ -238,8 +236,7 @@ class Idlix : MainAPI() {
                                         ?: return@apmap
 
                         val password = createKey(json.key, json.embedurl)
-                        val decrypted =
-                                CryptoJsAes.decrypt(json.embedurl, password) ?: return@apmap
+                        val decrypted = CryptoJsAes.decrypt(json.embedurl, password) ?: return@apmap
 
                         val embedJson =
                                 AppUtils.tryParseJson<Map<String, String>>(decrypted as String?)
@@ -278,7 +275,6 @@ class Idlix : MainAPI() {
     private fun addBase64Padding(input: String): String {
         return input + "=".repeat((4 - input.length % 4) % 4)
     }
-
 
     private suspend fun getUrl(
             url: String,
