@@ -73,7 +73,7 @@ class Animasu : MainAPI() {
     private fun Element.toSearchResult(): AnimeSearchResponse {
         val href = getProperAnimeLink(fixUrlNull(this.selectFirst("a")?.attr("href")).toString())
         val title = this.select("div.tt").text().trim()
-        val posterUrl = fixUrlNull(this.selectFirst("div.limit img")?.getImageAttr())
+        val posterUrl = this.selectFirst("div.limit img")?.attr("src").toString()
         val epNum = this.selectFirst("span.epx")?.text()?.filter { it.isDigit() }?.toIntOrNull()
         return newAnimeSearchResponse(title, href, TvType.Anime) {
             this.posterUrl = posterUrl
@@ -96,7 +96,7 @@ class Animasu : MainAPI() {
                         .toString()
                         .replace("Sub Indo", "")
                         .trim()
-        val poster = document.selectFirst("div.bigcontent img")?.getImageAttr()
+        val poster = document.selectFirst("div.bigcontent img")?.attr("src").toString()
 
         val table = document.selectFirst("div.infox div.spe")
         val type = getType(table?.selectFirst("span:contains(Jenis:)")?.ownText())
