@@ -44,7 +44,15 @@ class UseeTv : MainAPI() {
                 listOf(
                                 Pair("col-xs-4", "Semua"),
                                 Pair("local", "Local"),
+                                Pair("sport", "Sports"),
                                 Pair("news", "News"),
+                                Pair("movies", "Movies"),
+                                Pair("music", "Music"),
+                                Pair("kids", "Kids"),
+                                Pair("knowledge", "Knowledge"),
+                                Pair("lifestyle", "Lifestyle"),
+                                Pair("entertainment", "Entertainment"),
+                                Pair("religi", "Religion"),
                         )
                         .map { (soap, name) ->
                             val home =
@@ -82,39 +90,42 @@ class UseeTv : MainAPI() {
         val content = document.selectFirst("div.d-flex.video-schedule-time p")?.text()?.split("•")
 
         // Perbaikan: Gunakan Regex object dengan benar
-        val scriptContent = document.select("script").find { scriptElement ->
-            val pattern = Regex("var v\\d+ = 'http", RegexOption.IGNORE_CASE)
-            scriptElement.data().contains(pattern)
-        }?.data()
+        val scriptContent =
+                document.select("script")
+                        .find { scriptElement ->
+                            val pattern = Regex("var v\\d+ = 'http", RegexOption.IGNORE_CASE)
+                            scriptElement.data().contains(pattern)
+                        }
+                        ?.data()
 
-        val m3u8Url = scriptContent?.let {
-            """var v\d+ = '([^']+)';""".toRegex().find(it)?.groupValues?.get(1)
-        }?.takeIf { it.contains(".m3u8") }
+        val m3u8Url =
+                scriptContent
+                        ?.let {
+                            """var v\d+ = '([^']+)';""".toRegex().find(it)?.groupValues?.get(1)
+                        }
+                        ?.takeIf { it.contains(".m3u8") }
 
         requireNotNull(m3u8Url) { "Gagal mengekstrak URL M3U8" }
 
         return LiveStreamLoadResponse(
-            content?.firstOrNull()?.trim() ?: "Live Stream",
-            url,
-            this.name,
-            m3u8Url,
-            fixUrlNull(document.selectFirst("div.row.video-schedule img")?.attr("src")),
-            plot = document.selectFirst("title")?.text()
+                content?.firstOrNull()?.trim() ?: "Live Stream",
+                url,
+                this.name,
+                m3u8Url,
+                fixUrlNull(document.selectFirst("div.row.video-schedule img")?.attr("src")),
+                plot = document.selectFirst("title")?.text()
         )
     }
 
     override suspend fun loadLinks(
-        data: String,
-        isCasting: Boolean,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
+            data: String,
+            isCasting: Boolean,
+            subtitleCallback: (SubtitleFile) -> Unit,
+            callback: (ExtractorLink) -> Unit
     ): Boolean {
         // Gunakan domain streaming sebagai referrer
-        M3u8Helper.generateM3u8(
-            this.name,
-            data,
-            "https://streaming.indihometv.com"
-        ).forEach(callback)
+        M3u8Helper.generateM3u8(this.name, data, "https://streaming.indihometv.com")
+                .forEach(callback)
 
         return true
     }
