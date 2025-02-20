@@ -1,30 +1,49 @@
-# Indostream Cloudstream Extensions
+# IndoStream: Kumpulan Ekstensi CloudStream untuk Konten Indonesia
 
-This repository contains extensions for the Cloudstream application. Each extensions is organized into its own subdirectory and can be built and included in the Cloudstream app.
+IndoStream adalah kumpulan ekstensi CloudStream yang berfokus pada penyediaan konten streaming dari berbagai sumber di Indonesia. Repositori ini berisi ekstensi yang memperluas fungsionalitas aplikasi CloudStream, memungkinkan pengguna untuk menikmati berbagai macam film, serial, dan anime dari situs-situs populer di Indonesia.
 
-```Link Repo
-https://raw.githubusercontent.com/tekuma25/IndoStream/builds/repo.json
-```
+## Fitur Utama
 
-## Project Structure
+*   **Beragam Sumber Konten:** Akses konten dari berbagai situs streaming populer di Indonesia.
+*   **Mudah Digunakan:** Instalasi dan penggunaan yang sederhana melalui aplikasi CloudStream.
+*   **Pembaruan Reguler:** Ekstensi diperbarui secara berkala untuk memastikan kompatibilitas dan ketersediaan konten.
+*   **Fokus pada Konten Indonesia:** Kumpulan ekstensi ini berfokus pada konten yang relevan dengan pengguna di Indonesia.
 
-- **Animasu/**: Contains the Animasu plugin extension.
-- **Dubbindo/**: Contains the Dubbindo extension.
-- **Gomov/**: Contains the Gomov extension.
-- **Idlix/**: Contains the Idlix extension.
-- **Kuramanime/**: Contains the Kuramanime extension.
-- **LayarKaca/**: Contains the LayarKaca extension.
-- **Nimegami/**: Contains the Nimegami extension.
-- **Oploverz/**: Contains the Oploverz extension.
-- **Otakudesu/**: Contains the Otakudesu extension.
-- **Pencurimovie/**: Contains the Pencurimovie extension.
-- **Samehadaku/**: Contains the Samehadaku extension.
-- **UseeTv/**: Contains the UseeTv extension.
+## Daftar Ekstensi
 
-## Building the Project
+Berikut adalah daftar ekstensi yang tersedia di repositori IndoStream:
 
-To build the project, you need to have [Gradle](https://gradle.org/) installed. You can build the project using the following command:
+| Nama Ekstensi | Deskripsi                                                                        |
+|---------------|----------------------------------------------------------------------------------|
+| Animasu       | Menyediakan akses ke konten anime dari situs Animasu.                            |
+| Dubbindo      | Menyediakan akses ke konten film dan serial yang di-dubbing ke Bahasa Indonesia. |
+| Gomov         | Menyediakan akses ke konten film dari situs Gomov.                               |
+| Idlix         | Menyediakan akses ke konten film dan serial dari situs Idlix.                    |
+| Kuramanime    | Menyediakan akses ke konten anime dari situs Kuramanime.                         |
+| LayarKaca     | Menyediakan akses ke konten film dan serial dari situs LayarKaca.                |
+| Nimegami      | Menyediakan akses ke konten anime dari situs Nimegami.                           |
+| Oploverz      | Menyediakan akses ke konten anime dari situs Oploverz.                           |
+| Otakudesu     | Menyediakan akses ke konten anime dari situs Otakudesu.                          |
+| Pencurimovie  | Menyediakan akses ke konten film dari situs Pencurimovie.                        |
+| Samehadaku    | Menyediakan akses ke konten anime dari situs Samehadaku.                         |
+| UseeTv        | Menyediakan akses ke konten TV dari situs UseeTv.                                |
 
-```sh
-./gradlew build
-```
+## Cara Menggunakan
+
+1.  Buka aplikasi CloudStream.
+2.  Buka menu "Ekstensi".
+3.  Klik tombol "Tambahkan Repositori".
+4.  Masukkan URL repositori IndoStream: https://raw.githubusercontent.com/TeKuma25/IndoStream/builds/repo.json
+5.  Klik "Tambahkan".
+6.  Ekstensi yang tersedia akan muncul di daftar.
+7.  Pilih ekstensi yang ingin Anda instal dan klik "Instal".
+
+## Membangun Proyek
+
+Untuk membangun proyek ini, Anda memerlukan [Gradle](https://gradle.org/) yang terinstal. Anda dapat membangun proyek menggunakan perintah berikut:
+
+sh ./gradlew build
+
+## Kontribusi
+
+Kami menyambut baik kontribusi dari komunitas! Jika Anda ingin menambahkan ekstensi baru, memperbaiki bug, atau meningkatkan dokumentasi, silakan buat *pull request* atau buka *issue*.

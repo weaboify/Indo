@@ -56,7 +56,7 @@ class Anoboy : MainAPI() {
             .parsedSafe<Responses>()?.data
             ?.mapNotNull { media ->
                 media.toSearchResponse()
-            } ?: throw ErrorLoadingException("Invalid Json reponse")
+            } ?: throw ErrorLoadingException("Invalid Json response")
         return newHomePageResponse(request.name, home)
     }
 

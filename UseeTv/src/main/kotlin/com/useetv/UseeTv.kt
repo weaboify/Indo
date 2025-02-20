@@ -80,29 +80,41 @@ class UseeTv : MainAPI() {
     override suspend fun load(url: String): LoadResponse? {
         val document = app.get(url).document
         val content = document.selectFirst("div.d-flex.video-schedule-time p")?.text()?.split("•")
-        val link =
-                document.select("script")
-                        .findLast { it.data().contains("\$('.live').last()") }
-                        ?.data()
-                        ?.let { Regex("'$mainLink(.*)';var").find(it)?.groupValues?.getOrNull(1) }
+
+        // Perbaikan: Gunakan Regex object dengan benar
+        val scriptContent = document.select("script").find { scriptElement ->
+            val pattern = Regex("var v\\d+ = 'http", RegexOption.IGNORE_CASE)
+            scriptElement.data().contains(pattern)
+        }?.data()
+
+        val m3u8Url = scriptContent?.let {
+            """var v\d+ = '([^']+)';""".toRegex().find(it)?.groupValues?.get(1)
+        }?.takeIf { it.contains(".m3u8") }
+
+        requireNotNull(m3u8Url) { "Gagal mengekstrak URL M3U8" }
+
         return LiveStreamLoadResponse(
-                content?.firstOrNull()?.trim() ?: return null,
-                url,
-                this.name,
-                "$mainLink$link",
-                fixUrlNull(document.selectFirst("div.row.video-schedule img")?.attr("src")),
-                plot = document.selectFirst("title")?.text()
+            content?.firstOrNull()?.trim() ?: "Live Stream",
+            url,
+            this.name,
+            m3u8Url,
+            fixUrlNull(document.selectFirst("div.row.video-schedule img")?.attr("src")),
+            plot = document.selectFirst("title")?.text()
         )
     }
 
     override suspend fun loadLinks(
-            data: String,
-            isCasting: Boolean,
-            subtitleCallback: (SubtitleFile) -> Unit,
-            callback: (ExtractorLink) -> Unit
+        data: String,
+        isCasting: Boolean,
+        subtitleCallback: (SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
     ): Boolean {
-
-        M3u8Helper.generateM3u8(this.name, data, mainUrl).forEach(callback)
+        // Gunakan domain streaming sebagai referrer
+        M3u8Helper.generateM3u8(
+            this.name,
+            data,
+            "https://streaming.indihometv.com"
+        ).forEach(callback)
 
         return true
     }
