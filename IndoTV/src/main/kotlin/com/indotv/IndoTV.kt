@@ -30,7 +30,7 @@ class IndoTV : MainAPI() {
                 val streamurl = channel.url.toString()
                 val channelname = channel.title.toString()
                 val posterurl = channel.attributes["tvg-logo"].toString()
-                val nation = channel.attributes["group-title"].toString()
+                val nation = "id"
                 val key=channel.attributes["key"].toString()
                 val keyid=channel.attributes["keyid"].toString()
                 LiveSearchResponse(
@@ -56,7 +56,7 @@ class IndoTV : MainAPI() {
                 val streamurl = channel.url.toString()
                 val channelname = channel.title.toString()
                 val posterurl = channel.attributes["tvg-logo"].toString()
-                val nation = channel.attributes["group-title"].toString()
+                val nation = "id"
                 val key=channel.attributes["key"].toString()
                 val keyid=channel.attributes["keyid"].toString()
                 LiveSearchResponse(
