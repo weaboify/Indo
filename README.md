@@ -13,39 +13,39 @@ IndoStream adalah kumpulan ekstensi CloudStream yang berfokus pada penyediaan ko
 
 Berikut adalah daftar ekstensi yang tersedia di repositori IndoStream:
 
-| Nama Ekstensi | Status                                      |
-| ------------- | ------------------------------------------- |
-| Animasu       | Jalan, gambar poster tidak muncul           |
-| Animindo      | Error                                       |
-| Animesail     | Jalan, perlu perbaikan menu                 |
-| Anoboy        | Error                                       |
-| Dramaid       | Link Error. Oppadrama jalan                 |
-| DramaSerial   | Error                                       |
-| Dubbindo      | Jalan                                       |
-| Dutamovie     | Butuh VPN                                   |
-| Funmovieslix  | Jalan                                       |
-| Gomov         | Butuh VPN, Link Error, perlu perbaikan menu |
-| Gomunime      | Down                                        |
-| Idlix         | Link Error                                  |
-| IndoTV        | Jalan                                       |
-| Kuramanime    | Butuh VPN, Link Error                       |
-| Kuronime      | Link Error                                  |
-| LayarKaca     | Jalan, perlu perbaikan menu                 |
-| Minioppai     | Error                                       |
-| Nekopoi       | Butuh VPN                                   |
-| Neonime       | Error                                       |
-| Ngefilm       | Error                                       |
-| Nimegami      | Jalan, perlu perbaikan menu                 |
-| Nodrakorid    | Error tidak bisa diinstal                   |
-| NontonAnimeID | Down                                        |
-| Oploverz      | Down                                        |
-| Otakudesu     | Jalan                                       |
-| Pencurimovie  | Jalan                                       |
-| Pusatfilm     | The Operation is not implemented            |
-| Raveeflix     | Down                                        |
-| Rebahin       | Butuh VPN, Link Error                       |
-| Samehadaku    | Butuh VPN                                   |
-| UseeTv        | Jalan                                       |
+| Nama Ekstensi | Status                            |
+| ------------- | --------------------------------- |
+| Animasu       | Jalan, gambar poster tidak muncul |
+| Animindo      | Error                             |
+| Animesail     | Jalan                             |
+| Anoboy        | Error                             |
+| Dramaid       | Link Error. Oppadrama jalan       |
+| DramaSerial   | Error                             |
+| Dubbindo      | Jalan                             |
+| Dutamovie     | Butuh VPN                         |
+| Funmovieslix  | Jalan                             |
+| Gomov         | Butuh VPN, Link Error             |
+| Gomunime      | Down                              |
+| Idlix         | Link Error                        |
+| IndoTV        | Jalan                             |
+| Kuramanime    | Butuh VPN, Link Error             |
+| Kuronime      | Link Error                        |
+| LayarKaca     | Jalan, perlu perbaikan menu       |
+| Minioppai     | Error                             |
+| Nekopoi       | Butuh VPN                         |
+| Neonime       | Error                             |
+| Ngefilm       | Error                             |
+| Nimegami      | Jalan, perlu perbaikan menu       |
+| Nodrakorid    | Error tidak bisa diinstal         |
+| NontonAnimeID | Down                              |
+| Oploverz      | Down                              |
+| Otakudesu     | Jalan                             |
+| Pencurimovie  | Jalan                             |
+| Pusatfilm     | The Operation is not implemented  |
+| Raveeflix     | Down                              |
+| Rebahin       | Butuh VPN, Link Error             |
+| Samehadaku    | Butuh VPN                         |
+| UseeTv        | Jalan                             |
 
 ## Cara Menggunakan
 
