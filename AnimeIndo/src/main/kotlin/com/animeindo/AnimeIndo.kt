@@ -62,11 +62,11 @@ class AnimeIndo : MainAPI() {
                       "donghua-terbaru" to "Donghua Terbaru", */
                     )
 
-    /* override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val document = app.get("$mainUrl/${request.data}/page/$page").document
         val home = document.select("main#main div.animposx").mapNotNull { it.toSearchResult() }
         return newHomePageResponse(request.name, home)
-    } */
+    }
 
     private fun getProperAnimeLink(uri: String): String {
         return if (uri.contains("/anime/")) {
