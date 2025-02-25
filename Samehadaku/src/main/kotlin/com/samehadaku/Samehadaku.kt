@@ -35,6 +35,7 @@ class Samehadaku : MainAPI() {
             mainPageOf(
                     "$mainUrl/page/" to "Episode Terbaru",
                     "$mainUrl/" to "HomePage",
+                    "$mainUrl/daftar-anime-2/page/" to "Daftar Anime",
             )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
