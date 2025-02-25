@@ -46,7 +46,7 @@ class Nimegami : MainAPI() {
                     "/type/movie" to "Movie",
                     "/type/ona" to "ONA",
                     "/type/ova" to "OVA",
-                    "/type/ova/special" to "OVA",
+                    "/type/ova/special" to "OVA Special",
             )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
