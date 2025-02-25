@@ -8,7 +8,7 @@ import org.jsoup.nodes.Element
 
 class LayarKaca : MainAPI() {
 
-    override var mainUrl = "https://tv9.lk21.am.in"
+    override var mainUrl = "https://lk21.film"
     private var seriesUrl = "https://tv14.nontondrama.click"
 
     override var name = "LayarKaca"
