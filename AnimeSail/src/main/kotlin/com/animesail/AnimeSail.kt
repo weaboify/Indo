@@ -53,7 +53,7 @@ class AnimeSail : MainAPI() {
     override val mainPage = mainPageOf(
         "$mainUrl/page/" to "Episode Terbaru",
         "$mainUrl/movie-terbaru/page/" to "Movie Terbaru",
-        "$mainUrl/genres/donghua/page/" to "Donghua"
+        "$mainUrl/genres/donghua/page/" to "Donghua",
         "$mainUrl/action/page/%d" to "Action",
         "$mainUrl/adult-cast/page/%d" to "Adult Cast",
         "$mainUrl/adventure/page/%d" to "Adventure",
