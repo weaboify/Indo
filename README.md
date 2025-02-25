@@ -30,7 +30,7 @@ Berikut adalah daftar ekstensi yang tersedia di repositori IndoStream:
 | IndoTV        | Jalan                             |
 | Kuramanime    | Butuh VPN, Link Error             |
 | Kuronime      | Link Error                        |
-| LayarKaca     | Jalan, perlu perbaikan menu       |
+| LayarKaca     | Jalan                             |
 | Minioppai     | Error                             |
 | Nekopoi       | Butuh VPN                         |
 | Neonime       | Error                             |

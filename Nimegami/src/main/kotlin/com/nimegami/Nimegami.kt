@@ -37,16 +37,16 @@ class Nimegami : MainAPI() {
 
     override val mainPage =
             mainPageOf(
-                "" to "Updated Anime",
-                "/type/drama-movie/page/" to "Drama Movie",
-                "/type/drama-series/page/" to "Drama Series",
-                "/type/live/" to "Live",
-                "/type/live-action/page/" to "Live Action",
-                "/type/tv" to "Anime",
-                "/type/movie/page/" to "Movie",
-                "/type/ona/page/" to "ONA",
-                "/type/ova/page/" to "OVA",
-                "/type/ova/special/" to "OVA",
+                    "" to "Updated Anime",
+                    "/type/drama-movie" to "Drama Movie",
+                    "/type/drama-series" to "Drama Series",
+                    "/type/live" to "Live",
+                    "/type/live-action" to "Live Action",
+                    "/type/tv" to "Anime",
+                    "/type/movie" to "Movie",
+                    "/type/ona" to "ONA",
+                    "/type/ova" to "OVA",
+                    "/type/ova/special" to "OVA",
             )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
