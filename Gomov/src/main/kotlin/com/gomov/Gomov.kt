@@ -21,9 +21,9 @@ open class Gomov : MainAPI() {
 
     override val mainPage =
             mainPageOf(
-                    "best-rating/page/" to "Best Rating",
-                    "tv/page/" to "TV Series",
-                    "category/asia/page/" to "Asia",
+                    "best-rating/page/%d/" to "Best Rating",
+                    "tv/page/%d/" to "TV Series",
+                    "category/asia/page/%d/" to "Asia",
                     "category/korean/" to "Korean",
                     "category/india/" to "Indian",
                     "category/western/" to "Western",

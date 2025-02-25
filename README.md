@@ -13,20 +13,39 @@ IndoStream adalah kumpulan ekstensi CloudStream yang berfokus pada penyediaan ko
 
 Berikut adalah daftar ekstensi yang tersedia di repositori IndoStream:
 
-| Nama Ekstensi | Deskripsi                                                                        |
-|---------------|----------------------------------------------------------------------------------|
-| Animasu       | Menyediakan akses ke konten anime dari situs Animasu.                            |
-| Dubbindo      | Menyediakan akses ke konten film dan serial yang di-dubbing ke Bahasa Indonesia. |
-| Gomov         | Menyediakan akses ke konten film dari situs Gomov.                               |
-| Idlix         | Menyediakan akses ke konten film dan serial dari situs Idlix.                    |
-| Kuramanime    | Menyediakan akses ke konten anime dari situs Kuramanime.                         |
-| LayarKaca     | Menyediakan akses ke konten film dan serial dari situs LayarKaca.                |
-| Nimegami      | Menyediakan akses ke konten anime dari situs Nimegami.                           |
-| Oploverz      | Menyediakan akses ke konten anime dari situs Oploverz.                           |
-| Otakudesu     | Menyediakan akses ke konten anime dari situs Otakudesu.                          |
-| Pencurimovie  | Menyediakan akses ke konten film dari situs Pencurimovie.                        |
-| Samehadaku    | Menyediakan akses ke konten anime dari situs Samehadaku.                         |
-| UseeTv        | Menyediakan akses ke konten TV dari situs UseeTv.                                |
+| Nama Ekstensi | Status                                      |
+| ------------- | ------------------------------------------- |
+| Animasu       | Jalan, gambar poster tidak muncul           |
+| Animindo      | Error                                       |
+| Animesail     | Jalan, perlu perbaikan menu                 |
+| Anoboy        | Error                                       |
+| Dramaid       | Link Error. Oppadrama jalan                 |
+| DramaSerial   | Error                                       |
+| Dubbindo      | Jalan                                       |
+| Dutamovie     | Butuh VPN                                   |
+| Funmovieslix  | Jalan                                       |
+| Gomov         | Butuh VPN, Link Error, perlu perbaikan menu |
+| Gomunime      | Down                                        |
+| Idlix         | Link Error                                  |
+| IndoTV        | Jalan                                       |
+| Kuramanime    | Butuh VPN, Link Error                       |
+| Kuronime      | Link Error                                  |
+| LayarKaca     | Jalan, perlu perbaikan menu                 |
+| Minioppai     | Error                                       |
+| Nekopoi       | Butuh VPN                                   |
+| Neonime       | Error                                       |
+| Ngefilm       | Error                                       |
+| Nimegami      | Jalan, perlu perbaikan menu                 |
+| Nodrakorid    | Error tidak bisa diinstal                   |
+| NontonAnimeID | Down                                        |
+| Oploverz      | Down                                        |
+| Otakudesu     | Jalan                                       |
+| Pencurimovie  | Jalan                                       |
+| Pusatfilm     | The Operation is not implemented            |
+| Raveeflix     | Down                                        |
+| Rebahin       | Butuh VPN, Link Error                       |
+| Samehadaku    | Butuh VPN                                   |
+| UseeTv        | Jalan                                       |
 
 ## Cara Menggunakan
 
