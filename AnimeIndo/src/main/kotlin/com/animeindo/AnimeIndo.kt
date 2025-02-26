@@ -34,27 +34,27 @@ class AnimeIndo : MainAPI() {
 
     override val mainPage =
             mainPageOf(
-                    /* "" to "Latest Release",
-                    "$mainUrl/genres/action/page/" to "Action",
-                    "$mainUrl/genres/adult-cast/" to "Adult Cast",
-                    "$mainUrl/genres/genres/adventure/page/" to "Adventure",
-                    "$mainUrl/genres/genres/Award-Winning/" to "Award Winning",
-                    "$mainUrl/genres/genres/comedy/page/" to "Comedy",
-                    "$mainUrl/genres/genres/drama/page/" to "Drama",
-                    "$mainUrl/genres/genres/ecchi" to "Ecchi",
-                    "$mainUrl/genres/genres/isekai/page/" to "Isekai",
-                    "$mainUrl/genres/fantasy/page/" to "Fantasy",
-                    "$mainUrl/genres/harem/page/" to "Harem",
-                    "$mainUrl/genres/historical/page" to "Historical",
-                    "$mainUrl/genres/martial-arts" to "Martial Arts",
-                    "$mainUrl/genres/military/page/" to "Military",
-                    "$mainUrl/genres/music/page/" to "Music",
-                    "$mainUrl/genres/mystery/" to "Mystery",
-                    "$mainUrl/genres/parody" to "Parody",
-                    "$mainUrl/genres/psychological/page/" to "Psychological",
-                    "$mainUrl/genres/romance/page/" to "Romance", */
-                    "genres/school/page/" to "School",
-                    "genres/sci-fi/" to "Sci-Fi",
+                    "" to "Latest Release",
+                    "genres/action" to "Action",
+                    "genres/adult-cast" to "Adult Cast",
+                    "genres/adventure" to "Adventure",
+                    "genres/Award-Winning" to "Award Winning",
+                    "genres/comedy" to "Comedy",
+                    "genres/drama" to "Drama",
+                    "genres/ecchi" to "Ecchi",
+                    "genres/isekai" to "Isekai",
+                    "genres/fantasy" to "Fantasy",
+                    "genres/harem" to "Harem",
+                    "genres/historical" to "Historical",
+                    "genres/martial-arts" to "Martial Arts",
+                    "genres/military" to "Military",
+                    "genres/music" to "Music",
+                    "genres/mystery" to "Mystery",
+                    "genres/parody" to "Parody",
+                    "genres/psychological" to "Psychological",
+                    "genres/romance" to "Romance",
+                    "genres/school" to "School",
+                    "genres/sci-fi" to "Sci-Fi",
                     "genres/sports" to "Sports",
                     "latest-release" to "Episode Terbaru",
                     "ongoing" to "Anime Ongoing",
@@ -104,10 +104,10 @@ class AnimeIndo : MainAPI() {
     override suspend fun search(query: String): List<SearchResponse> {
         val anime = mutableListOf<SearchResponse>()
         (1..2).forEach { page ->
-            val document = app.get("$mainUrl/page/$page/?s=$query").document
+            val document = app.get("$mainUrl/?s=$query").document
             val media =
-                    document.select(".site-main.relat > article").mapNotNull {
-                        val title = it.selectFirst("div.title > h2")!!.ownText().trim()
+                    document.select("article.bs").mapNotNull {
+                        val title = it.selectFirst("div.tt")!!.ownText().trim()
                         val href = it.selectFirst("a")!!.attr("href")
                         val posterUrl = it.selectFirst("img")!!.attr("src").toString()
                         val type = getType(it.select("div.type").text().trim())
