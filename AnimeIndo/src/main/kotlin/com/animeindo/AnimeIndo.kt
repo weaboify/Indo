@@ -34,7 +34,7 @@ class AnimeIndo : MainAPI() {
 
     override val mainPage =
             mainPageOf(
-                    "" to "Latest Release",
+                    /* "" to "Latest Release",
                     "$mainUrl/genres/action/page/" to "Action",
                     "$mainUrl/genres/adult-cast/" to "Adult Cast",
                     "$mainUrl/genres/genres/adventure/page/" to "Adventure",
@@ -52,15 +52,15 @@ class AnimeIndo : MainAPI() {
                     "$mainUrl/genres/mystery/" to "Mystery",
                     "$mainUrl/genres/parody" to "Parody",
                     "$mainUrl/genres/psychological/page/" to "Psychological",
-                    "$mainUrl/genres/romance/page/" to "Romance",
-                    "$mainUrl/genres/school/page/" to "School",
-                    "$mainUrl/genres/sci-fi/page/" to "Sci-Fi",
-                    "$mainUrl/genres/sports/page/" to "Sports",
-                    /* "latest-release" to "Episode Terbaru",
+                    "$mainUrl/genres/romance/page/" to "Romance", */
+                    "genres/school/page/" to "School",
+                    "genres/sci-fi/" to "Sci-Fi",
+                    "genres/sports" to "Sports",
+                    "latest-release" to "Episode Terbaru",
                     "ongoing" to "Anime Ongoing",
                     "populer" to "Anime Populer",
-                    "donghua-terbaru" to "Donghua Terbaru", */
-                    )
+                    "donghua-terbaru" to "Donghua Terbaru",
+            )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val document = app.get("$mainUrl/${request.data}/page/$page").document
