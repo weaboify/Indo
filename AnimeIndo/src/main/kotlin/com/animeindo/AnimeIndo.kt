@@ -88,7 +88,7 @@ class AnimeIndo : MainAPI() {
     private fun Element.toSearchResult(): AnimeSearchResponse {
         val title = this.selectFirst("div.tt > h2")?.text()?.trim() ?: ""
         val href = getProperAnimeLink(this.selectFirst("a.tip")!!.attr("href"))
-        val posterUrl = fixUrlNull(this.selectFirst("img")?.attr("src"))
+        val posterUrl = fixUrlNull(this.selectFirst("div.limit > img")?.attr("src"))
         val epNum =
                 this.selectFirst("span.epx")
                         ?.ownText()
@@ -109,7 +109,7 @@ class AnimeIndo : MainAPI() {
                     document.select("article.bs").mapNotNull {
                         val title = it.selectFirst("div.tt")!!.ownText().trim()
                         val href = it.selectFirst("a")!!.attr("href")
-                        val posterUrl = it.selectFirst("img")!!.attr("src").toString()
+                        val posterUrl = it.selectFirst("div.limit > img")!!.attr("src").toString()
                         val type = getType(it.select("div.type").text().trim())
                         newAnimeSearchResponse(title, href, type) { this.posterUrl = posterUrl }
                     }
@@ -152,9 +152,9 @@ class AnimeIndo : MainAPI() {
 
         val trailer = document.selectFirst("div.player-embed iframe")?.attr("src")
         val episodes =
-                document.select("div.lstepsiode.listeps ul li")
+                document.select("div.eplister ul li")
                         .mapNotNull {
-                            val header = it.selectFirst("span.lchx > a") ?: return@mapNotNull null
+                            val header = it.selectFirst("a") ?: return@mapNotNull null
                             val episode =
                                     header.text().trim().replace("Episode", "").trim().toIntOrNull()
                             val link = fixUrl(header.attr("href"))
@@ -191,7 +191,7 @@ class AnimeIndo : MainAPI() {
     ): Boolean {
 
         val document = app.get(data).document
-        document.select("div.itemleft > .mirror > option")
+        document.select("div.mobius > select.mirror > option")
                 .mapNotNull {
                     fixUrl(Jsoup.parse(base64Decode(it.attr("value"))).select("iframe").attr("src"))
                 }
