@@ -57,14 +57,14 @@ class AnimeIndo : MainAPI() {
                     "$mainUrl/genres/sci-fi/page/%d/" to "Sci-Fi",
                     "$mainUrl/genres/sports/page/%d/" to "Sports",
                     /* "latest-release" to "Episode Terbaru",
-                      "ongoing" to "Anime Ongoing",
-                      "populer" to "Anime Populer",
-                      "donghua-terbaru" to "Donghua Terbaru", */
+                    "ongoing" to "Anime Ongoing",
+                    "populer" to "Anime Populer",
+                    "donghua-terbaru" to "Donghua Terbaru", */
                     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val document = app.get("$mainUrl/${request.data}/page/$page").document
-        val home = document.select("main#main div.animposx").mapNotNull { it.toSearchResult() }
+        val document = app.get(request.data + page).document
+        val home = document.select("article.bs").mapNotNull { it.toSearchResult() }
         return newHomePageResponse(request.name, home)
     }
 
