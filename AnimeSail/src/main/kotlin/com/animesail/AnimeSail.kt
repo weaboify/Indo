@@ -118,7 +118,7 @@ class AnimeSail : MainAPI() {
     private fun Element.toSearchResult(): AnimeSearchResponse {
         val href = getProperAnimeLink(fixUrlNull(this.selectFirst("a")?.attr("href")).toString())
         val title = this.select(".tt > h2").text().trim()
-        val posterUrl = fixUrlNull(this.selectFirst("div.limit img")?.attr("src"))
+        val posterUrl = fixUrl(this.selectFirst("div.limit img")?.attr("src") ?: "")
         val epNum =
                 this.selectFirst(".tt > h2")?.text()?.let {
                     Regex("Episode\\s?(\\d+)").find(it)?.groupValues?.getOrNull(1)?.toIntOrNull()
