@@ -63,7 +63,7 @@ class AnimeIndo : MainAPI() {
                     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val document = aapp.get("$mainUrl/${request.data}/page/$page").document
+        val document = app.get("$mainUrl/${request.data}/page/$page").document
         val home = document.select("article.bs").mapNotNull { it.toSearchResult() }
         return newHomePageResponse(request.name, home)
     }
