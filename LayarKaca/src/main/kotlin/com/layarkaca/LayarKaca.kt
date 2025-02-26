@@ -4,6 +4,8 @@ import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.*
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import org.jsoup.nodes.Element
 
 class LayarKaca : MainAPI() {
@@ -71,7 +73,11 @@ class LayarKaca : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val document = app.get("$mainUrl/search.php?s=$query").document
+        val mainUrl = "https://tv14.nontondrama.click"
+        val encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString())
+        val document =
+                app.get("$mainUrl/search.php?s=$query#gsc.tab=0&gsc.q=$encodedQuery&gsc.page=1")
+                        .document
         return document.select("div.search-item").mapNotNull {
             val title = it.selectFirst("a")?.attr("title") ?: ""
             val href = fixUrl(it.selectFirst("a")?.attr("href") ?: return@mapNotNull null)
