@@ -86,11 +86,11 @@ class AnimeIndo : MainAPI() {
     }
 
     private fun Element.toSearchResult(): AnimeSearchResponse {
-        val title = this.selectFirst("div.title, h2.entry-title, h4")?.text()?.trim() ?: ""
-        val href = getProperAnimeLink(this.selectFirst("a")!!.attr("href"))
+        val title = this.selectFirst("div.tt > h2")?.text()?.trim() ?: ""
+        val href = getProperAnimeLink(this.selectFirst("a.tip")!!.attr("href"))
         val posterUrl = fixUrlNull(this.selectFirst("img")?.attr("src"))
         val epNum =
-                this.selectFirst("span.episode")
+                this.selectFirst("span.epx")
                         ?.ownText()
                         ?.replace(Regex("\\D"), "")
                         ?.trim()
