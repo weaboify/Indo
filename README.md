@@ -45,7 +45,7 @@ Berikut adalah daftar ekstensi yang tersedia di repositori IndoStream:
 | Raveeflix     | Down                              |
 | Rebahin       | Butuh VPN, Link Error             |
 | Samehadaku    | Butuh VPN                         |
-| UseeTv        | Jalan                             |
+| UseeTv        | Error                             |
 
 ## Cara Menggunakan
 

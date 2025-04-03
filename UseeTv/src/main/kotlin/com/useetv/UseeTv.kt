@@ -77,7 +77,7 @@ class UseeTv : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        return app.get("$mainUrl/tv/live")
+        return app.get("$mainUrl/search?keyword=$query")
                 .document
                 .select("div#channelContainer div.col-channel")
                 .mapNotNull { it }
