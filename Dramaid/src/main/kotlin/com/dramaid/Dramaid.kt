@@ -184,7 +184,7 @@ open class Dramaid : MainAPI() {
         }
 
         sources.map {
-            it.replace("https://ndrama.xyz", "https://www.fembed.com")
+            it.replace("https://gdrive.web.id", "https://www.fembed.com")
         }.apmap {
             when {
                 it.contains("motonews") -> invokeDriveSource(
